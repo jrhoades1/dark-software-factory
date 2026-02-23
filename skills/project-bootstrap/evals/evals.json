@@ -1,0 +1,142 @@
+[
+    {
+        "id": "bootstrap-trigger-new-project",
+        "input": "I want to start a new project for a customer portal",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": true,
+        "notes": "Direct 'new project' request"
+    },
+    {
+        "id": "bootstrap-trigger-scaffold",
+        "input": "Can you scaffold a FastAPI app for my analytics dashboard?",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": true,
+        "notes": "Scaffold request with specific stack"
+    },
+    {
+        "id": "bootstrap-trigger-build-me",
+        "input": "Build me a tool that tracks employee time off",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": true,
+        "notes": "'Build me' trigger phrase"
+    },
+    {
+        "id": "bootstrap-trigger-from-scratch",
+        "input": "Let's create an app from scratch for managing plumbing jobs",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": true,
+        "notes": "'From scratch' trigger phrase"
+    },
+    {
+        "id": "bootstrap-trigger-greenfield",
+        "input": "Starting a greenfield project. Need a React frontend with a Python backend.",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": true,
+        "notes": "Greenfield trigger with stack preferences"
+    },
+    {
+        "id": "bootstrap-no-trigger-bugfix",
+        "input": "There's a bug in the login form. The submit button doesn't work.",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": false,
+        "notes": "Bug fix — not a bootstrap task"
+    },
+    {
+        "id": "bootstrap-no-trigger-feature",
+        "input": "Add a dark mode toggle to the settings page",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": false,
+        "notes": "Feature addition to existing project — not bootstrap"
+    },
+    {
+        "id": "bootstrap-no-trigger-review",
+        "input": "Can you review my pull request and check for security issues?",
+        "expected_skill": "project-bootstrap",
+        "should_trigger": false,
+        "notes": "Code review — should trigger security-hardening, not bootstrap"
+    },
+    {
+        "id": "citadel-trigger-build-app",
+        "input": "Let's build this app. Follow the secure workflow.",
+        "expected_skill": "citadel-workflow",
+        "should_trigger": true,
+        "notes": "Build request + workflow mention → CITADEL"
+    },
+    {
+        "id": "citadel-trigger-citadel-name",
+        "input": "Run the CITADEL process on this new feature",
+        "expected_skill": "citadel-workflow",
+        "should_trigger": true,
+        "notes": "Direct CITADEL reference"
+    },
+    {
+        "id": "security-trigger-audit",
+        "input": "Run a security audit on this codebase before we deploy",
+        "expected_skill": "security-hardening",
+        "should_trigger": true,
+        "notes": "Security audit request"
+    },
+    {
+        "id": "security-trigger-production-ready",
+        "input": "Is this application production-ready? Check the security.",
+        "expected_skill": "security-hardening",
+        "should_trigger": true,
+        "notes": "Production readiness check"
+    },
+    {
+        "id": "security-trigger-enforce",
+        "input": "We're at the Enforce step. Run the pre-deployment checks.",
+        "expected_skill": "security-hardening",
+        "should_trigger": true,
+        "notes": "CITADEL Enforce step handoff"
+    },
+    {
+        "id": "hipaa-trigger-phi",
+        "input": "This app handles patient data. What do we need for HIPAA?",
+        "expected_skill": "hipaa-scaffold",
+        "should_trigger": true,
+        "notes": "Patient data + HIPAA mention"
+    },
+    {
+        "id": "hipaa-trigger-healthcare",
+        "input": "Building a healthcare app that processes Medicare claims",
+        "expected_skill": "hipaa-scaffold",
+        "should_trigger": true,
+        "notes": "Healthcare + Medicare trigger"
+    },
+    {
+        "id": "onboarding-trigger-setup",
+        "input": "How do I set up Claude Code? I'm new to this.",
+        "expected_skill": "onboarding-setup",
+        "should_trigger": true,
+        "notes": "First-time setup request"
+    },
+    {
+        "id": "servicetitan-trigger-analytics",
+        "input": "Show me technician performance for this week from ServiceTitan",
+        "expected_skill": "servicetitan-analysis",
+        "should_trigger": true,
+        "notes": "ServiceTitan analytics request"
+    },
+    {
+        "id": "servicetitan-trigger-ald",
+        "input": "Pull the ALD revenue report for last month",
+        "expected_skill": "servicetitan-analysis",
+        "should_trigger": true,
+        "notes": "ALD-specific analytics"
+    },
+    {
+        "id": "composition-bootstrap-then-citadel",
+        "input": "Build me a SaaS application for invoice management. Full secure build.",
+        "expected_skills": ["project-bootstrap", "citadel-workflow"],
+        "should_trigger": true,
+        "notes": "Should trigger bootstrap for scaffolding, then CITADEL for secure build process"
+    },
+    {
+        "id": "composition-bootstrap-hipaa",
+        "input": "Create a new app for managing patient records",
+        "expected_skills": ["project-bootstrap", "hipaa-scaffold"],
+        "should_trigger": true,
+        "notes": "New app + patient data → bootstrap + HIPAA"
+    }
+]
