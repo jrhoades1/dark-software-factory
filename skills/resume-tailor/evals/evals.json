@@ -1,0 +1,117 @@
+{
+  "skill_name": "resume-tailor",
+  "evals": [
+    {
+      "id": 0,
+      "name": "strong-match-light-tailoring",
+      "prompt": "I just evaluated that VP of Engineering role at HealthFirst — it scored 'strong'. Go ahead and tailor my resume for it.",
+      "expected_output": "Light tailoring: keyword injection, bullet reordering, minimal structural changes. All three files produced (.md, .docx, .pdf). metadata.json updated with resume_version.",
+      "context": "Application folder exists at applications/2026-02-24_healthfirst_vp-engineering/ with metadata.json showing overall: strong, keywords including value-based care, AI/ML, HL7/FHIR, HIPAA, AWS.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates resume.md, resume.docx, and resume.pdf in the application folder",
+          "type": "structural"
+        },
+        {
+          "id": "updates-metadata",
+          "text": "Updates metadata.json with resume_version field pointing to the resume filename",
+          "type": "structural"
+        },
+        {
+          "id": "light-intensity",
+          "text": "Uses light tailoring — same overall structure as base resume, no section reordering or major rewrites",
+          "type": "quality"
+        },
+        {
+          "id": "keywords-present",
+          "text": "Job posting keywords (value-based care, AI/ML, HL7/FHIR, HIPAA) appear naturally in the tailored resume",
+          "type": "quality"
+        },
+        {
+          "id": "no-fabrication",
+          "text": "Every bullet traces to either base-resume.docx or achievements.md — nothing invented",
+          "type": "quality"
+        },
+        {
+          "id": "shows-changes-summary",
+          "text": "Presents a summary of what changed and why, including tailoring intensity used",
+          "type": "behavioral"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "stretch-match-heavy-tailoring",
+      "prompt": "That DevOps Platform Lead role at Netflix scored 'stretch' but I still want to give it a shot. Tailor my resume — make it as strong as possible.",
+      "expected_output": "Heavy tailoring: rewritten summary targeting DevOps/platform engineering, experience reordered to lead with most relevant roles, multiple achievements pulled from achievements.md, honest note about remaining gaps. All three files produced.",
+      "context": "Application folder exists with metadata.json showing overall: stretch, gaps including 'streaming infrastructure experience' and 'dedicated DevOps leadership role', partial matches on CI/CD and cloud. Keywords: Kubernetes, Terraform, CI/CD, platform engineering, SRE, observability.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates resume.md, resume.docx, and resume.pdf in the application folder",
+          "type": "structural"
+        },
+        {
+          "id": "heavy-intensity",
+          "text": "Uses heavy tailoring — rewritten summary, reordered bullets, possibly reordered sections",
+          "type": "quality"
+        },
+        {
+          "id": "pulls-from-achievements",
+          "text": "Adds achievements from achievements.md that aren't on the base resume (e.g., CI/CD and DevOps items from Red Spot)",
+          "type": "quality"
+        },
+        {
+          "id": "addresses-gaps-honestly",
+          "text": "Notes remaining hard gaps in the change summary rather than pretending they don't exist",
+          "type": "quality"
+        },
+        {
+          "id": "no-fabrication",
+          "text": "Every bullet traces to either base-resume.docx or achievements.md — nothing invented",
+          "type": "quality"
+        },
+        {
+          "id": "suggests-cover-letter",
+          "text": "Recommends cover letter to address remaining gaps and asks if user wants to proceed to cover-letter-writer",
+          "type": "behavioral"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "former-employer-light-override",
+      "prompt": "Tailor my resume for the Cognizant Chief Architect role. That's my old company so you know the deal.",
+      "expected_output": "Light tailoring despite any match score because former_employer is true. Resume emphasizes what candidate has done SINCE Cognizant, not the Cognizant experience itself. Avoids over-tailoring.",
+      "context": "Application folder exists with metadata.json showing former_employer: true, former_employer_role: 'Chief Technology Architect', overall: strong.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates resume.md, resume.docx, and resume.pdf in the application folder",
+          "type": "structural"
+        },
+        {
+          "id": "light-intensity-override",
+          "text": "Uses light tailoring because this is a former employer, regardless of match score",
+          "type": "quality"
+        },
+        {
+          "id": "emphasizes-post-cognizant",
+          "text": "Emphasizes experience gained AFTER leaving Cognizant (ilumed, Perceptive) rather than over-detailing the Cognizant tenure",
+          "type": "quality"
+        },
+        {
+          "id": "acknowledges-return",
+          "text": "Summary or positioning acknowledges the return — something like 'returning with expanded scope' rather than hiding the connection",
+          "type": "quality"
+        },
+        {
+          "id": "no-over-tailoring",
+          "text": "Does not heavily restructure or rewrite — the resume stays recognizable and doesn't look like it was over-engineered for a place that already knows the candidate",
+          "type": "quality"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "skill_name": "cover-letter-writer",
+  "evals": [
+    {
+      "id": 0,
+      "name": "strong-match-concise-letter",
+      "prompt": "Resume is tailored, now write the cover letter for the HealthFirst VP of Engineering role.",
+      "expected_output": "Short formal cover letter (3 paragraphs). Leads with specific interest in HealthFirst's value-based care scaling challenge. Highlights 2-3 strongest matches with numbers. Minimal gap addressing since it's a strong match. Under one page.",
+      "context": "Application folder at 2026-02-24_healthfirst_vp-engineering with metadata showing overall: strong, tailored resume complete.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates cover-letter.md, cover-letter.docx, and cover-letter.pdf",
+          "type": "structural"
+        },
+        {
+          "id": "three-to-four-paragraphs",
+          "text": "Letter body contains exactly 3-4 paragraphs (not counting salutation/closing)",
+          "type": "structural"
+        },
+        {
+          "id": "company-specific-opening",
+          "text": "Opening paragraph references something specific to HealthFirst (e.g., scaling to 1M lives, value-based care tools) — not generic praise",
+          "type": "quality"
+        },
+        {
+          "id": "includes-numbers",
+          "text": "Body includes at least 2 quantified achievements from achievements.md",
+          "type": "quality"
+        },
+        {
+          "id": "formal-tone",
+          "text": "Uses formal business tone — no contractions, no casual phrasing",
+          "type": "quality"
+        },
+        {
+          "id": "under-one-page",
+          "text": "Letter fits on a single page",
+          "type": "structural"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "stretch-match-gap-addressing",
+      "prompt": "Write the cover letter for the Netflix DevOps Platform Lead position. It's a stretch but I want to make my case.",
+      "expected_output": "Slightly longer cover letter (4 paragraphs). Acknowledges the stretch honestly. Frames CI/CD and infrastructure experience as directly transferable. Addresses platform engineering gap through architecture experience. Doesn't pretend streaming infrastructure experience exists.",
+      "context": "Application folder at 2026-02-24_netflix_devops-platform-lead with metadata showing overall: stretch, hard gaps in streaming infrastructure and chaos engineering.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates cover-letter.md, cover-letter.docx, and cover-letter.pdf",
+          "type": "structural"
+        },
+        {
+          "id": "addresses-gaps-positively",
+          "text": "Addresses at least one addressable gap by framing adjacent experience as a strength (not by saying 'I lack...')",
+          "type": "quality"
+        },
+        {
+          "id": "does-not-fabricate",
+          "text": "Does not claim streaming infrastructure or chaos engineering experience that doesn't exist in achievements.md",
+          "type": "quality"
+        },
+        {
+          "id": "makes-the-case",
+          "text": "Body makes a genuine argument for why the candidate is worth interviewing despite the gaps — not just listing skills",
+          "type": "quality"
+        },
+        {
+          "id": "formal-tone",
+          "text": "Uses formal business tone — no contractions, no casual phrasing",
+          "type": "quality"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "former-employer-return-narrative",
+      "prompt": "Cover letter for the Cognizant Chief Architect role — remember this is my old company.",
+      "expected_output": "Short letter (3 paragraphs). Leads with the return narrative — what's changed since leaving. Emphasizes post-Cognizant growth (AI/ML, value-based care, CTO scope). Does not rehash Cognizant experience at length.",
+      "context": "Application folder at 2026-02-24_cognizant_chief-architect with metadata showing former_employer: true.",
+      "assertions": [
+        {
+          "id": "produces-three-formats",
+          "text": "Creates cover-letter.md, cover-letter.docx, and cover-letter.pdf",
+          "type": "structural"
+        },
+        {
+          "id": "acknowledges-return",
+          "text": "Letter explicitly mentions returning to Cognizant or references the prior tenure",
+          "type": "quality"
+        },
+        {
+          "id": "emphasizes-post-cognizant-growth",
+          "text": "Body focuses on what the candidate gained SINCE leaving (CTO at ilumed, AI/ML integration, value-based care)",
+          "type": "quality"
+        },
+        {
+          "id": "does-not-rehash",
+          "text": "Does not spend more than 1 sentence describing what the candidate did AT Cognizant previously",
+          "type": "quality"
+        },
+        {
+          "id": "formal-tone",
+          "text": "Uses formal business tone — no contractions, no casual phrasing",
+          "type": "quality"
+        }
+      ]
+    }
+  ]
+}

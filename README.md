@@ -1,158 +1,136 @@
-# Dark Software Factory — Claude Code Skills
+# Dark Software Factory — Open Source Claude Code Skills
 
-Portable workflow packages that teach Claude your repeatable development processes.
-Write once, run forever.
+Battle-tested workflow packages that teach Claude repeatable development processes.
+Built from real client engagements. Free to use, copy, and adapt.
 
-## Migration from v1 (Monolithic Files)
+## Why Open Source
 
-This package replaces the three monolithic framework files with composable, progressively-
-disclosed skills:
+Skills are markdown files. There's no binary to protect, no build step to gate.
+Once someone reads one, they can copy it. So we share them openly.
 
-| Old File | Lines | New Skill(s) | Status |
-|----------|-------|--------------|--------|
-| `CLAUDE.md` (v2.0) | 467 | `global/CLAUDE.md` (101 lines) | Migrated |
-| `BUILD_APP.md` (v4.0) | 1,848 | `citadel-workflow` + `security-hardening` | Migrated |
-| `SETUP_GUIDE.md` (v2.0) | 607 | `onboarding-setup` | Migrated |
-| `REQUIREMENTS_TEMPLATE.md` | 80 | Referenced from `citadel-workflow` | Referenced |
+The value isn't the file — it's the operational knowledge baked into it. Every skill
+in this repo exists because a real engagement produced a real lesson. The
+[Five-Dimension Check](skills/servicetitan-analysis/references/analysis-methodology.md)
+wasn't invented in a vacuum — it was extracted from an analysis that got the answer
+188% wrong on the first pass and self-corrected in the same session.
 
-**Key improvement:** BUILD_APP.md alone was 1,848 lines dumped into context every time.
-Now the CITADEL workflow is 320 lines in the SKILL.md with detailed content in 9 reference
-files loaded only when needed.
+**Skills are the portfolio, not the product.** If you can run them yourself, great.
+If you want the person who wrote them to run them for you, [that's the business](https://darksoftwarefactory.com).
 
-## Skills Overview
+## Skills
 
-| Skill | Status | SKILL.md | References | Purpose |
-|---|---|---|---|---|
-| **project-bootstrap** | Complete | 174 lines | 5 refs + script + evals | Scaffold full-stack applications |
-| **citadel-workflow** | Complete | 320 lines | 9 refs | 7-step secure build process |
-| **security-hardening** | Complete | 221 lines | 4 refs | Pre-deployment audit + monitoring |
-| **hipaa-scaffold** | Complete | 226 lines | — | HIPAA compliance layer |
-| **onboarding-setup** | Complete | 244 lines | — | Beginner-safe Claude Code setup |
-| **servicetitan-analysis** | Stub | 101 lines | — | MCP-based operational analytics |
+| Skill | References | Model | Purpose |
+|---|---|---|---|
+| **[project-bootstrap](skills/project-bootstrap/SKILL.md)** | 5 refs + script + evals | Sonnet | Scaffold full-stack applications |
+| **[citadel-workflow](skills/citadel-workflow/SKILL.md)** | 9 refs | Opus | 7-step secure build process (Conceive-Inventory-Tie-Assemble-Drill-Enforce-Look) |
+| **[security-hardening](skills/security-hardening/SKILL.md)** | 4 refs | Sonnet | Pre-deployment audit + monitoring |
+| **[hipaa-scaffold](skills/hipaa-scaffold/SKILL.md)** | — | Opus | HIPAA compliance layer for healthcare apps |
+| **[onboarding-setup](skills/onboarding-setup/SKILL.md)** | — | Haiku | Beginner-safe Claude Code environment setup |
+| **[servicetitan-analysis](skills/servicetitan-analysis/SKILL.md)** | 2 refs | Sonnet | Operational analytics for home services businesses via MCP |
+| **[job-intake](skills/job-intake/SKILL.md)** | 3 refs + evals | Sonnet | Parse job postings, score fit, create application folders with learning loop |
+| **[resume-tailor](skills/resume-tailor/SKILL.md)** | 2 refs + evals | Sonnet | Adaptive resume tailoring with page-fitting — light/moderate/heavy based on match score |
+| **[cover-letter-writer](skills/cover-letter-writer/SKILL.md)** | 1 ref + evals | Opus | Concise formal cover letters — adapts strategy to match score, addresses gaps, former-employer awareness |
+| **[job-tracker](skills/job-tracker/SKILL.md)** | 1 ref + evals | Haiku | Status tracking, follow-up management, and tracker.xlsx sync — the bookkeeping layer that closes the loop |
 
-**Total:** 28 files, 6,315 lines across all skills and references.
+**Total:** ~50 files, 10,000+ lines across all skills and references.
+
+## Quick Start
+
+### Install into Claude Code
+```bash
+# Copy skills to your Claude Code skills directory
+cp -r skills/* ~/.claude/skills/
+
+# Copy global standards to your project
+cp global/CLAUDE.md ~/your-project/CLAUDE.md
+```
+
+### Or add to a project repo
+```bash
+cp -r skills/ .claude/skills/
+```
+
+## How Skills Work
+
+Each skill follows progressive disclosure — load only what's needed:
+
+| Level | What loads | When |
+|-------|-----------|------|
+| **Metadata** | Name + description (YAML frontmatter) | Always in context |
+| **SKILL.md** | Core workflow instructions | When skill triggers |
+| **References** | Detailed patterns, examples, case studies | On demand |
+
+This means Claude doesn't burn context on the full IR playbook when scaffolding a project, or load attack scenarios when setting up monitoring.
+
+## Skill Composition
+
+Skills chain together for common workflows:
+
+| Workflow | Skills |
+|----------|--------|
+| New SaaS product | project-bootstrap → citadel-workflow → security-hardening |
+| Healthcare app | project-bootstrap → citadel-workflow → hipaa-scaffold → security-hardening |
+| Pre-deployment audit | security-hardening (standalone) |
+| ServiceTitan analytics | servicetitan-analysis (standalone, requires MCP server) |
+| New developer onboarding | onboarding-setup (standalone) |
+| Job application | job-intake → resume-tailor → cover-letter-writer → job-tracker |
 
 ## Architecture
 
 ```
 dark-software-factory/
-├── README.md                              ← You are here
+├── README.md
 ├── global/
-│   └── CLAUDE.md                          # Always-loaded rules (101 lines)
+│   └── CLAUDE.md                          # Always-loaded standards
 └── skills/
-    ├── project-bootstrap/                 # Scaffolding & project structure
-    │   ├── SKILL.md                       # Bootstrap process
-    │   ├── scripts/bootstrap.py           # Automated scaffolding (FastAPI/Next.js/minimal)
-    │   ├── references/
-    │   │   ├── stack-defaults.md          # Opinionated stack choices
-    │   │   ├── claude-md-template.md      # Template for project CLAUDE.md files
-    │   │   ├── quality-gates.md           # Linting, type checking, security scanning
-    │   │   ├── project-structure.md       # Manual setup guide
-    │   │   └── monorepo-setup.md          # Multi-service architecture
-    │   └── evals/evals.json               # 20 trigger test cases (all skills)
+    ├── project-bootstrap/
+    │   ├── SKILL.md
+    │   ├── scripts/bootstrap.py           # Automated scaffolding
+    │   ├── references/                    # 5 files: stack defaults, templates, quality gates
+    │   └── evals/evals.json              # 20 trigger test cases
     │
-    ├── citadel-workflow/                   # 7-step secure build methodology
-    │   ├── SKILL.md                       # C-I-T-A-D-E-L process
-    │   └── references/
-    │       ├── schema-patterns.md         # Secure schema with RLS + constraints
-    │       ├── zero-trust-patterns.md     # Middleware, mTLS, field encryption
-    │       ├── ai-security.md             # LLM security (OWASP LLM Top 10)
-    │       ├── attack-scenarios.md        # 11-scenario threat catalog
-    │       ├── integration-security.md    # External service security requirements
-    │       ├── enterprise-secrets.md      # AWS/GCP/Azure vault patterns
-    │       ├── security-testing.md        # Full security test checklist
-    │       ├── perf-security-balance.md   # Caching, rate limiting, encryption overhead
-    │       └── api-security.md            # Versioning, signing, GraphQL, webhooks
+    ├── citadel-workflow/
+    │   ├── SKILL.md
+    │   └── references/                    # 9 files: zero-trust, AI security, attack scenarios, etc.
     │
-    ├── security-hardening/                # Pre-deployment audit + monitoring
-    │   ├── SKILL.md                       # 10-section audit checklist
-    │   └── references/
-    │       ├── ir-playbook.md             # 5-phase incident response
-    │       ├── ir-templates.md            # Internal + external notification templates
-    │       ├── alert-thresholds.md        # Monitoring stack + alert config
-    │       └── infrastructure-checklist.md # Cloud, container, DB, CI/CD security
+    ├── security-hardening/
+    │   ├── SKILL.md
+    │   └── references/                    # 4 files: IR playbook, alert thresholds, infra checklist
     │
-    ├── hipaa-scaffold/                    # Healthcare compliance layer
-    │   └── SKILL.md                       # PHI boundaries, audit logging, encryption,
-    │                                      # BAA requirements, FHIR/HL7 patterns
+    ├── hipaa-scaffold/
+    │   └── SKILL.md
     │
-    ├── onboarding-setup/                  # Beginner-safe environment setup
-    │   └── SKILL.md                       # Install, security training, first session
+    ├── onboarding-setup/
+    │   └── SKILL.md
     │
-    └── servicetitan-analysis/             # MCP-based operational analytics
-        └── SKILL.md                       # (stub — formalize from ALD work)
-```
-
-## Progressive Disclosure Model
-
-Each skill follows a three-level loading pattern:
-
-| Level | What loads | Size | When |
-|-------|-----------|------|------|
-| **1. Metadata** | Name + description (YAML frontmatter) | ~100 words | Always in context |
-| **2. SKILL.md** | Core workflow instructions | <500 lines | When skill triggers |
-| **3. References** | Detailed patterns, examples, templates | Unlimited | On demand |
-
-**Why this matters:** The old BUILD_APP.md was 1,848 lines loaded every time. Now:
-- CITADEL workflow SKILL.md: 320 lines (the process)
-- Zero-trust patterns: loaded only during Inventory/Assemble steps
-- IR playbook: loaded only during Look step
-- Alert config: loaded only when setting up monitoring
-
-Scripts (like `bootstrap.py`) execute without loading into context at all.
-
-## How to Install
-
-### In Claude Code
-```bash
-# Copy skills to your Claude Code skills directory
-cp -r skills/* ~/.claude/skills/
-
-# Copy global CLAUDE.md to your projects
-cp global/CLAUDE.md ~/your-project/CLAUDE.md
-```
-
-### In a project repo
-```bash
-# Add skills as a subdirectory
-cp -r skills/ .claude/skills/
-
-# Or symlink for shared development
-ln -s /path/to/dark-software-factory/skills .claude/skills
-```
-
-## Skill Composition
-
-Skills are designed to compose. Common workflows:
-
-**New healthcare app:**
-```
-project-bootstrap → citadel-workflow → hipaa-scaffold → security-hardening
-```
-
-**New SaaS product:**
-```
-project-bootstrap → citadel-workflow → security-hardening
-```
-
-**Pre-deployment check:**
-```
-security-hardening (standalone)
-```
-
-**Onboard new developer:**
-```
-onboarding-setup (standalone)
-```
-
-**Analyze ALD operations:**
-```
-servicetitan-analysis (standalone, requires MCP server)
+    ├── servicetitan-analysis/
+    │   ├── SKILL.md
+    │   └── references/                    # 2 files: Five-Dimension methodology, ALD case study
+    │
+    ├── job-intake/
+    │   ├── SKILL.md                       # recommended_model: sonnet
+    │   ├── references/                    # 3 files: scoring criteria, folder schema, model recs
+    │   └── evals/evals.json              # 10 trigger test cases
+    │
+    ├── resume-tailor/
+    │   ├── SKILL.md                       # recommended_model: sonnet
+    │   ├── references/                    # 2 files: tailoring patterns, docx format spec
+    │   └── evals/evals.json              # 3 test cases
+    │
+    ├── cover-letter-writer/
+    │   ├── SKILL.md                       # recommended_model: opus
+    │   ├── references/                    # 1 file: letter format spec
+    │   └── evals/evals.json              # 3 test cases
+    │
+    └── job-tracker/
+        ├── SKILL.md                       # recommended_model: haiku
+        ├── references/                    # 1 file: xlsx operations patterns
+        └── evals/evals.json              # 3 test cases
 ```
 
 ## Security Coverage
 
-| Framework | Coverage | Covered by |
+| Framework | Coverage | Provided by |
 |-----------|----------|------------|
 | OWASP Top 10 (2021) | 100% | security-hardening + citadel-workflow |
 | OWASP LLM Top 10 | 100% | citadel-workflow/ai-security.md |
@@ -161,69 +139,34 @@ servicetitan-analysis (standalone, requires MCP server)
 | Zero-Trust | Full | citadel-workflow/zero-trust-patterns.md |
 | Incident Response | Full | security-hardening/ir-playbook.md |
 
-## Reference File Index
+## Origin
 
-### citadel-workflow references (9 files, 2,193 lines)
-| File | Lines | Loaded during |
-|------|-------|---------------|
-| schema-patterns.md | 211 | Inventory step (data modeling) |
-| zero-trust-patterns.md | 357 | Inventory + Assemble steps |
-| ai-security.md | 336 | Assemble step (AI features) |
-| attack-scenarios.md | 277 | Inventory step (threat modeling) |
-| integration-security.md | 124 | Inventory + Tie steps |
-| enterprise-secrets.md | 156 | Tie step (secret management) |
-| security-testing.md | 194 | Drill step |
-| perf-security-balance.md | 239 | Drill step |
-| api-security.md | 299 | Assemble step (API-heavy apps) |
+These skills were extracted from production consulting work — not designed in theory.
+Each one represents a pattern that was tested, failed, corrected, and codified.
 
-### security-hardening references (4 files, 930 lines)
-| File | Lines | Loaded during |
-|------|-------|---------------|
-| ir-playbook.md | 222 | Look step (incident response) |
-| ir-templates.md | 271 | Active incident |
-| alert-thresholds.md | 216 | Look step (monitoring setup) |
-| infrastructure-checklist.md | 221 | Enforce step (cloud/container) |
+- **citadel-workflow** — evolved from a 1,848-line monolithic build doc that was too heavy for context
+- **servicetitan-analysis** — born from an ALD compensation analysis where the first answer was 188% low
+- **security-hardening** — built after auditing real deployments and finding the same gaps repeatedly
+- **hipaa-scaffold** — extracted from healthcare project compliance requirements
 
-### project-bootstrap references (5 files, 1,098 lines)
-| File | Lines | Loaded during |
-|------|-------|---------------|
-| stack-defaults.md | 142 | Step 1 (stack selection) |
-| claude-md-template.md | 145 | Step 3 (CLAUDE.md generation) |
-| quality-gates.md | 302 | Step 4 (quality gate setup) |
-| project-structure.md | 220 | Step 2 (manual setup) |
-| monorepo-setup.md | 289 | Multi-service projects only |
+- **job-intake** — built from a manual walkthrough of the job application process, proving the folder structure and scoring system before codifying it into a skill. Introduced the learning loop pattern where the skill updates its own reference data when corrected.
+- **resume-tailor** — developed through iteration when the first version consistently spilled resumes to 2 pages. The bullet budget system and 4-level formatting levers were added after observing the failure across all test cases.
+- **cover-letter-writer** — passed all tests on the first iteration. The match-score-adaptive strategy (strong=tight, stretch=make the case, former=what's changed) emerged from analyzing what makes cover letters effective for different scenarios.
+- **job-tracker** — the bookkeeping layer. Pure file operations that keep metadata.json and tracker.xlsx in sync so nothing falls through the cracks.
 
-## Design Principles
+The framework improves every time it runs. Mistakes become guardrails. Edge cases become reference docs.
 
-1. **Skills != prompts** — Real skills have scripts, references, and execution steps.
-   If it's just a wall of text, it's a prompt masquerading as a skill.
+## Contributing
 
-2. **Progressive disclosure saves tokens** — Claude doesn't need the full IR playbook
-   when scaffolding a project. Load context only when the task demands it.
+Found a gap? Built a skill for your own domain? PRs welcome.
 
-3. **Scripts > context window** — `bootstrap.py` creates 30+ files without burning
-   context on directory creation. Anything deterministic should be a script.
+A good skill has:
+1. **A SKILL.md** with clear trigger conditions and step-by-step workflow
+2. **A `recommended_model`** in the YAML frontmatter — Haiku for mechanical tasks, Sonnet for structured work, Opus for nuanced reasoning. Include the reasoning so others can evaluate the choice.
+3. **References** for anything too detailed for the main SKILL.md
+4. **Real-world origin** — it should come from actual work, not hypothetical best practices
+5. **Eval cases** — trigger tests that validate when the skill should and shouldn't fire
 
-4. **Compose, don't monolith** — Six focused skills beat one 2,800-line file.
-   Each skill has a clear responsibility and hands off to others when appropriate.
+## License
 
-5. **Test like you ship** — Every skill gets eval cases. 20 trigger tests cover all
-   skills including positive triggers, negative triggers, and composition scenarios.
-
-## Roadmap
-
-### Done
-- [x] project-bootstrap (full skill + script + 5 references + evals)
-- [x] citadel-workflow (full skill + 9 reference files)
-- [x] security-hardening (full skill + 4 reference files)
-- [x] hipaa-scaffold (full skill with PHI patterns + FHIR/HL7)
-- [x] onboarding-setup (full skill)
-- [x] Global CLAUDE.md (streamlined)
-- [x] Eval test cases (20 trigger tests across all skills)
-
-### Next
-- [ ] servicetitan-analysis — formalize MCP query patterns from ALD work
-- [ ] Description optimization (trigger accuracy tuning)
-- [ ] .skill packaging for marketplace distribution
-- [ ] Cross-skill composition automation
-- [ ] "Software Factory as a Service" client packaging
+MIT. Use it, fork it, build on it. If it helps you ship better software, that's the point.

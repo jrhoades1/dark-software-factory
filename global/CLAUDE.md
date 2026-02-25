@@ -9,6 +9,7 @@
 - **`security-hardening`** skill — Pre-deployment audit and monitoring setup.
 - **`hipaa-scaffold`** skill — HIPAA compliance layer for healthcare projects.
 - **`servicetitan-analysis`** skill — Operational analytics via MCP server.
+- **`csr-training`** skill — CSR training, call scripts, and pricing for American Leak Detection.
 - **`CLAUDE.project.md`** *(per-repo)* — Project-specific overrides. Always check for this.
 
 ## Core Philosophy
@@ -56,6 +57,33 @@ Rate limit. Cost limit. Log for abuse detection.
 **Dependencies:** Pin exact versions. Audit before merge. Prefer standard library.
 Verify new packages (maintainer, CVEs, downloads, license).
 
+## Model Selection for Skills
+
+Every skill should include a `recommended_model` field in its YAML frontmatter.
+This tells the system (and the developer) which model to use by default and when
+to upgrade. The goal is to match model capability to task complexity — not every
+skill needs the most expensive model.
+
+**Frontmatter format:**
+```yaml
+recommended_model:
+  default: sonnet | opus | haiku
+  reasoning: Why this model fits the task
+  upgrade_to_opus_when: Conditions that justify upgrading
+```
+
+**Selection criteria:**
+- **Haiku** — mechanical file operations, data formatting, spreadsheet updates.
+  Tasks where the output is deterministic and doesn't benefit from deeper reasoning.
+- **Sonnet** — structured extraction, pattern matching, scoring, code generation,
+  standard analysis. The workhorse for most skills.
+- **Opus** — persuasive writing, nuanced reasoning, creative positioning, strategic
+  advice, complex multi-step analysis where quality variance matters.
+
+Don't default to Opus out of caution. A skill that runs 50 times on Opus when Sonnet
+would produce identical results is burning budget for no benefit. Be honest about what
+each task actually requires.
+
 ## Cost Tracking & Billing
 
 Sessions logged to `claude-tracking/sessions.csv`. Each project needs
@@ -64,6 +92,7 @@ Sessions logged to `claude-tracking/sessions.csv`. Each project needs
 | Code | Project | Client |
 |------|---------|--------|
 | ALD-SERVICETITAN | ServiceTitan MCP Server | American Leak Detection |
+| ALD-CALL-ANALYSIS | Call Analysis & Training | American Leak Detection |
 
 ## Requirements Management
 
@@ -99,3 +128,24 @@ Each project has `requirements/` with structured specs (YAML frontmatter + markd
 All features must consider OWASP Top 10 (2021): A01–A10. Also reference
 OWASP Top 10 for LLMs if the project uses AI features. If unsure whether
 something is safe, default to rejecting the input.
+
+## Analysis Completion Check
+
+Before delivering a conclusion that informs a business decision, confirm
+all dimensions have been examined. If any are missing, state what's missing
+and frame the answer as preliminary.
+
+1. **RATE** — Is the unit price / unit economics changing?
+2. **VOLUME** — Is the quantity of work changing?
+3. **MIX** — Is the composition of work shifting?
+4. **STRUCTURE** — Are comp/cost models uniform across subjects?
+5. **EFFORT** — Are workloads comparable?
+6. **COHORT** — Who's in the analysis and why? Would the conclusion change if the cohort changed?
+
+> "Based on pricing data alone, the answer appears to be X. However, I haven't
+> yet examined volume trends or whether workloads are comparable. Should we
+> look at those before finalizing?"
+
+Applies when: output drives a dollar decision, multiple stakeholders compared, or
+someone could reasonably ask "but what about...?" after seeing the result.
+Skip for: simple lookups, single-dimension queries, exploratory framing.

@@ -14,9 +14,6 @@ description: >
 
 # ServiceTitan Analysis Skill
 
-> **Status:** Stub — needs formalization from ALD (American Leak Detection) work.
-> Core query patterns and report structures to be migrated from production use.
-
 Operational analytics for home services businesses via the ServiceTitan API.
 
 ## Prerequisites
@@ -25,12 +22,27 @@ Operational analytics for home services businesses via the ServiceTitan API.
 - Valid ServiceTitan API credentials (app key + tenant ID)
 - API access to the required endpoints (jobs, invoices, technicians, etc.)
 
+## Five-Dimension Analysis Check (Required)
+
+**Before delivering any conclusion that drives a business decision**, confirm the analysis covers all dimensions. See `references/analysis-methodology.md` for full detail.
+
+| Dimension | Question | Common miss |
+|-----------|----------|-------------|
+| **Rate** | Is the unit price changing? | Assuming price increases flow through uniformly |
+| **Volume** | Is the quantity of work changing? | Ignoring job count trends that compound rate changes |
+| **Mix** | Is the composition of work shifting? | Averaging across different job types |
+| **Structure** | Are comp/cost structures uniform? | Ignoring varied commission rates or fixed fees |
+| **Effort** | Is the workload comparable? | Comparing raw percentages without hours context |
+| **Cohort** | Who's in the analysis and why? | Letting outliers (new hires, part-timers) skew averages |
+
+If any dimension is unexamined, state what's missing. Frame the answer as preliminary.
+
 ## Available Analysis Types
 
 ### Technician Performance
 - Revenue per technician (daily, weekly, monthly)
 - Average ticket size by technician
-- Conversion rate (opportunities → sold jobs)
+- Conversion rate (opportunities -> sold jobs)
 - Callback rate (warranty returns)
 - Membership sales per technician
 
@@ -64,36 +76,78 @@ Operational analytics for home services businesses via the ServiceTitan API.
 
 ## Common Query Patterns
 
-```
-TODO: Migrate query patterns from production ALD work:
-- Technician scorecard query
-- Weekly revenue rollup
-- Job profitability report
-- Dispatch efficiency report
-- Membership retention analysis
-- Customer cohort analysis
-```
+### Technician Compensation Analysis
+The validated pattern from ALD production work. See `references/case-study-ald-comp.md`.
 
-## Report Templates
+1. **Period comparison** — Pull technician data for two comparable periods (e.g., Jun-Dec YoY)
+2. **Per-tech breakdown** — Jobs, revenue, $/job for each technician individually
+3. **Commission modeling** — Apply actual commission rates (they vary per tech) to see dollar impact
+4. **Monthly granularity** — Pull month-by-month data for trend analysis (1 API call per month x all techs)
+5. **Annualize** — Convert raw deltas to annual percentages for comparability
+6. **Five-Dimension sweep** — Rate, Volume, Mix, Structure, Effort, Cohort before concluding
 
-```
-TODO: Migrate report templates:
-- Weekly flash report (executive summary)
-- Technician scorecard (individual performance)
-- Business unit P&L
-- Dispatch optimization recommendations
-- Customer health dashboard
-```
+### Weekly Revenue Rollup
+1. Query completed jobs for the trailing 7 days by business unit
+2. Compare to same week prior year (seasonality) and prior week (trend)
+3. Break out by revenue type: service, install, maintenance, membership
+
+### Technician Scorecard
+1. Pull individual tech metrics for the scoring period
+2. Metrics: revenue, job count, avg ticket, conversion rate, callback rate, membership sales
+3. Rank against team averages and prior period self-comparison
+
+### Job Profitability Report
+1. Query jobs with revenue and cost data for the target period
+2. Calculate margin by job type and business unit
+3. Flag jobs below margin threshold
+4. Identify high-margin patterns worth replicating
+
+## Report Output Patterns
+
+### Tabular Comparison
+Best for tech-vs-tech or period-vs-period analysis:
+
+| Technician | Jobs | Revenue | $/Job | vs Prior | Commission Est |
+|-----------|------|---------|-------|----------|---------------|
+| Tech A | 45 | $X | $Y | +Z% | $W |
+
+### Trend Table
+Best for month-over-month or longitudinal analysis:
+
+| Month | Tech A $/Job | Tech B $/Job | Team Avg |
+|-------|-------------|-------------|----------|
+| 2024-06 | $X | $Y | $Z |
+
+### Decision Summary
+Always conclude business-decision analyses with:
+- Initial finding (what the first pass showed)
+- Revised finding (after all dimensions examined)
+- What changed and why
+- Recommended action with confidence level
 
 ## MCP Server Integration
 
-```
-TODO: Document MCP server configuration:
-- Required environment variables
-- Available tools/functions
-- Rate limiting considerations
-- Data refresh frequency
-```
+### Required Environment Variables
+- `SERVICETITAN_APP_KEY` — API application key
+- `SERVICETITAN_TENANT_ID` — Tenant identifier
+- `SERVICETITAN_CLIENT_ID` — OAuth client ID
+- `SERVICETITAN_CLIENT_SECRET` — OAuth client secret
+
+### Rate Limiting
+- ServiceTitan API has per-minute and daily rate limits
+- For multi-month analyses, sequential calls (1/month) stay within limits
+- Batch operations: check API docs before assuming batch support is available
+- If 429 errors occur: back off, reduce concurrency, consider caching responses
+
+### Data Refresh
+- ServiceTitan data is near-real-time for completed jobs
+- In-progress jobs may have partial data
+- For historical analysis, data is stable — cache aggressively
+
+## References
+
+- `references/analysis-methodology.md` — Five-Dimension Check methodology and when to apply it
+- `references/case-study-ald-comp.md` — ALD compensation analysis case study (validated pattern)
 
 ## Billing
 

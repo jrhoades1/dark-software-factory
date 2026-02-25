@@ -1,0 +1,72 @@
+[
+    {
+        "id": "intake-trigger-paste-job",
+        "input": "Check this out, saw it on LinkedIn this morning:\n\nVP of Engineering - HealthFirst Technologies\nRemote (US)\n\nWe're looking for a VP of Engineering to lead our platform team of 40+ engineers building next-gen value-based care tools. You'll own the technical roadmap, drive AI integration, and ensure HIPAA-compliant architecture as we scale from 200K to 1M+ lives managed.\n\nRequirements: 15+ years software engineering, 5+ in senior leadership, healthcare IT background (EHR, HL7/FHIR), AI/ML in production, AWS, value-based care experience. MBA preferred.\n\nIs this a good fit for me?",
+        "expected_skill": "job-intake",
+        "should_trigger": true,
+        "notes": "Classic paste-into-chat with a full job description and fit question"
+    },
+    {
+        "id": "intake-trigger-file-reference",
+        "input": "I saved a job posting to job-applications/applications/ as a text file. It's the CTO role at MedBridge. Can you parse it and tell me if I should apply?",
+        "expected_skill": "job-intake",
+        "should_trigger": true,
+        "notes": "File-based intake with explicit request to evaluate"
+    },
+    {
+        "id": "intake-trigger-casual-new-job",
+        "input": "new application — Director of Engineering at Optum, they want someone who's done healthcare AI and scaled teams past 50. Sounds like me right?",
+        "expected_skill": "job-intake",
+        "should_trigger": true,
+        "notes": "Casual trigger with 'new application' phrase"
+    },
+    {
+        "id": "intake-trigger-score-this",
+        "input": "score this job against my resume:\n\nChief Architect, Cognizant — Lead cloud migration for Fortune 500 healthcare clients. Requires 10+ years architecture experience, microservices, FHIR/HL7, multi-tenant SaaS. AWS and Azure required.",
+        "expected_skill": "job-intake",
+        "should_trigger": true,
+        "notes": "Explicit 'score this job' trigger with inline posting"
+    },
+    {
+        "id": "intake-trigger-is-this-a-fit",
+        "input": "Found this on Indeed — Senior Engineering Manager at Humana, remote, $180-220K. They need someone with value-based care platform experience, team of 25, HIPAA/SOC2, Python and Java. Think it's worth applying?",
+        "expected_skill": "job-intake",
+        "should_trigger": true,
+        "notes": "Natural 'is it worth applying' language with partial job details"
+    },
+    {
+        "id": "intake-no-trigger-salary-research",
+        "input": "What's the typical salary range for a VP of Engineering in healthcare tech? I want to make sure I'm not underselling myself.",
+        "expected_skill": "job-intake",
+        "should_trigger": false,
+        "notes": "Salary research — related to job search but not a specific posting to parse"
+    },
+    {
+        "id": "intake-no-trigger-interview-prep",
+        "input": "I have an interview with HealthFirst next Tuesday. Can you help me prep some answers about my experience scaling engineering teams?",
+        "expected_skill": "job-intake",
+        "should_trigger": false,
+        "notes": "Interview prep — downstream of intake, different workflow"
+    },
+    {
+        "id": "intake-no-trigger-resume-update",
+        "input": "Can you update my resume to emphasize the AI work I did at ilumed? I want to lead with the beneficiary coverage expansion.",
+        "expected_skill": "job-intake",
+        "should_trigger": false,
+        "notes": "Resume editing without a specific job to match against — resume-tailor territory"
+    },
+    {
+        "id": "intake-no-trigger-general-career",
+        "input": "Should I be looking at CTO roles or VP Eng roles? What's the difference in terms of career trajectory at my level?",
+        "expected_skill": "job-intake",
+        "should_trigger": false,
+        "notes": "General career advice — no specific job posting involved"
+    },
+    {
+        "id": "intake-no-trigger-cover-letter-only",
+        "input": "Write me a cover letter for the HealthFirst VP role. The application folder is already set up.",
+        "expected_skill": "job-intake",
+        "should_trigger": false,
+        "notes": "Cover letter request for already-parsed job — cover-letter-writer territory"
+    }
+]
