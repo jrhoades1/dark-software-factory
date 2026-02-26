@@ -50,12 +50,9 @@
 
 Don't default to Opus out of caution. Be honest about what each task actually requires.
 
-## Daily Log Protocol
+## Session Start
 
-At session start:
-1. Read `memory/MEMORY.md` for curated facts and preferences
-2. Read today's log: `memory/logs/YYYY-MM-DD.md`
-3. Read yesterday's log for continuity (if exists)
+Every new conversation begins with the session-start protocol (see `.claude/rules/session-start.md`). Run `python3 hooks/session_status.py`, read memory + logs, give Jimmy a quick briefing, ask what to work on. Same flow in every project.
 
 During session: append notable events, decisions, and completed tasks to today's log.
 
@@ -74,3 +71,4 @@ See `.claude/rules/guardrails.md` for safety rules and `.claude/rules/security-s
 - **`skill-creator`** — Create new skills from workflows.
 - **`task-manager`** — SQLite-backed task and project tracking.
 - **`research`** — Deep research on any topic with structured output.
+- **`session-start`** — Unified session startup: briefing, context pickup, daily log.

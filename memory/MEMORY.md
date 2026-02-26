@@ -3,8 +3,10 @@
 > Curated long-term facts. Read at session start. Keep under ~200 lines.
 
 ## Identity
+- Project: Dark Software Factory
 - Framework: Dark Software Factory
 - Developer: Jimmy
+- Billing: Internal
 - Business model: Contractor methodology (time + API costs)
 - Website: https://darksoftwarefactory.com
 
