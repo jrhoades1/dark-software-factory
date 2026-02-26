@@ -13,21 +13,30 @@ description: >
   for general writing help, thank-you notes, follow-up emails, or resignation letters —
   those are different workflows.
 recommended_model:
-  default: opus
+  default: sonnet
   reasoning: >
-    Cover letters are persuasive writing where model quality directly affects outcomes.
-    The letter needs to sound human, weave specific accomplishments into a narrative,
-    address gaps without drawing attention to them, and match the right tone. Opus
-    produces noticeably more natural, compelling prose than Sonnet for this task.
-  downgrade_to_sonnet_when: >
-    The user explicitly asks for a quick draft or says "keep costs low." A Sonnet
-    draft that the user edits is better than no letter at all.
+    Sonnet produces solid cover letters for the vast majority of applications and runs
+    significantly faster than Opus. For a typical job search with dozens of applications,
+    the speed difference is the primary concern — Sonnet returns results in seconds
+    rather than causing the UI to appear hung.
+  upgrade_to_opus_when: >
+    The application has significant gaps to address, the role is a long-shot that needs
+    creative positioning, or the user explicitly asks for maximum polish (e.g., "really
+    make this one count," "polish this," "this is my dream job"). Opus produces more
+    natural, compelling prose when the stakes justify the wait.
 ---
 
 # Cover Letter Writer — Concise, Targeted Application Letters
 
-Take the scored job data and tailored resume, then write a short, formal cover letter
-that makes the case for why this candidate is the right fit.
+## Intent
+
+1. **Company specificity is non-negotiable** — if the opening paragraph could be sent to any company in the industry, it fails; every letter must reference something specific about THIS company and THIS role
+2. **Formal business tone throughout** — no contractions, no casual phrasing; the letter reads like it was written by a senior professional, not generated from a template
+3. **Frame gaps honestly without apologizing** — "my multi-cloud work positions me to adopt GCP rapidly" is a strength; "I don't have GCP experience" is a red flag
+4. **Differentiate in screening** — the cover letter does what the resume cannot: tell a story, explain motivation, and pre-answer the reviewer's likely objections
+5. **Pre-answer objections before the reader forms them** — addressable gaps are woven into the body naturally, not listed in a confessional paragraph
+6. **Demonstrate writing quality as a signal** — for senior roles, the cover letter IS the writing sample; sloppy prose signals sloppy thinking
+7. **Complete in under 15 minutes; one page; 3-4 paragraphs** — brevity is a feature, not a constraint; if a recruiter has to scroll, they will not
 
 ## Why this skill exists
 

@@ -5,7 +5,15 @@ description: CSR training and onboarding for American Leak Detection covering ca
 
 # CSR Training Skill
 
-This skill encodes everything a new CSR at American Leak Detection Jupiter needs to handle calls professionally from day one. Built from 714 real call transcripts and Ken's approved service scripts.
+## Intent
+
+1. **Script fidelity to Ken's approved language** — the service descriptions are verbatim for a reason; a CSR improvising technical explanations creates liability and customer confusion
+2. **Complete information collection on every call** — the technician arrives prepared only if the CSR gathered all required customer, property, and issue details; missing data wastes a truck roll
+3. **Never diagnose or troubleshoot** — the CSR is not a technician; redirecting warmly to "our tech will determine that on site" protects the company and the customer
+4. **Pricing discipline without exceptions** — the price chart is the price chart; discounting erodes margins and sets expectations that cannot be sustained
+5. **Book appointments that convert to completed jobs** — every call that ends with a scheduled appointment is revenue; every call that ends with "I'll think about it" is a missed opportunity
+6. **Collect complete information before scheduling** — incomplete data means callbacks, reschedules, and unprepared technicians
+7. **Calls target 10-12 minutes; scheduling under 2 minutes** — efficiency keeps the phone lines available, but never at the cost of missing required information
 
 **Territory:** Palm Beach, Martin, & St. Lucie Counties (each office independently owned and operated).
 

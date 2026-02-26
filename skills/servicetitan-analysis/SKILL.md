@@ -14,7 +14,15 @@ description: >
 
 # ServiceTitan Analysis Skill
 
-Operational analytics for home services businesses via the ServiceTitan API.
+## Intent
+
+1. **Five-Dimension completeness before any conclusion** — rate, volume, mix, structure, effort, and cohort must all be examined before delivering a finding that drives a business decision; an incomplete analysis is worse than no analysis
+2. **Cohort validation is mandatory** — who is in the dataset and why; outliers skew averages and create false narratives
+3. **State confidence level explicitly** — "preliminary" is not a weakness; presenting uncertain findings as definitive is how bad decisions get made
+4. **Business expert reviews conclusions before action** — the data says what it says, but the operations manager knows context the numbers cannot capture
+5. **Enable data-driven operational decisions** — the goal is giving business owners answers they cannot get from ServiceTitan's native reporting
+6. **Identify high-margin patterns worth replicating** — analysis should surface what works, not just what happened
+7. **Per-month query under 2 minutes; full 6-month analysis under 15 minutes** — speed matters for responsiveness, but never at the cost of skipping a dimension or misattributing data
 
 ## Prerequisites
 

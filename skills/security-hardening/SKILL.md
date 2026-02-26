@@ -15,8 +15,15 @@ description: >
 
 # Security Hardening Skill
 
-Audit existing applications for vulnerabilities and apply production hardening.
-Implements the CITADEL Enforce (E) and Look (L) steps.
+## Intent
+
+1. **Require human sign-off on every audit** — automated scanning finds issues, but a person must verify the remediation and accept residual risk before deployment
+2. **Verify secrets manually, not just programmatically** — secret scanners miss context; human review catches the API key in a comment, the credential in a migration, the token in a test fixture
+3. **Prevent breaches before production** — every vulnerability found pre-deployment is an incident that never happens
+4. **Detect and respond to incidents in production** — monitoring without alerting is logging; alerting without a playbook is panic
+5. **Meet compliance baselines systematically** — SOC 2, HIPAA, and OWASP checks should be repeatable, not heroic
+6. **Complete a full audit in under 4 hours for a 10K LOC codebase** — thoroughness matters, but so does keeping security audits from blocking releases indefinitely
+7. **Secret scans under 1 minute; alert latency under 5 minutes** — speed at the operational level, never at the cost of completeness
 
 ## When to use this skill
 

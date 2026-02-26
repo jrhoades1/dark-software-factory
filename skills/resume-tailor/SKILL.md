@@ -25,8 +25,15 @@ recommended_model:
 
 # Resume Tailor — Customize Resumes for Specific Jobs
 
-Take the candidate's base resume and the scored job data from job-intake, then produce
-a tailored version that maximizes the candidate's apparent fit for the role.
+## Intent
+
+1. **Never fabricate experience** — every bullet must trace back to base-resume.docx or achievements.md; repositioning is fine, inventing is not
+2. **The candidate must recognize their own resume** — tailoring adjusts emphasis and language, it does not create a document the candidate cannot defend in an interview
+3. **User override authority is absolute** — if the candidate says "lead with Red Spot" or "drop Cognizant," that instruction overrides the adaptive logic without question
+4. **Maximize apparent fit for the specific role** — surface the right keywords, lead with the most relevant experience, and address gaps through positioning
+5. **Automate the tedious rewrite** — the candidate should not hand-edit a resume for every application; structured data from job-intake drives the tailoring
+6. **Light tailoring under 5 minutes, moderate under 10, heavy under 15** — speed matters across dozens of applications, but never at the cost of fabrication or a resume that spills to two pages
+7. **One page, always** — with 20+ years of experience this requires deliberate compression; bullet budgets and formatting levers exist for this reason
 
 ## Why this skill exists
 

@@ -25,9 +25,14 @@ recommended_model:
 
 # Job Tracker — Keep Applications Organized
 
-Update application statuses, set follow-up dates, and keep the tracker spreadsheet
-in sync with individual application folders. This is the last skill in the chain —
-it turns completed applications into tracked, follow-up-able records.
+## Intent
+
+1. **metadata.json is the single source of truth** — tracker.xlsx is a convenience view; when they conflict, metadata.json wins and the spreadsheet gets corrected
+2. **Follow-up discipline prevents lost opportunities** — every "applied" status gets a follow-up date; every passed follow-up date gets surfaced; no application silently expires
+3. **Folder completeness before status advancement** — warn when advancing to "applied" if resume or cover letter files are missing from the application folder
+4. **No lost applications** — every status change is persistent across both metadata.json and tracker.xlsx; nothing falls through the cracks between sessions
+5. **Searchable history enables learning** — past applications are data for analytics and strategy, not dead folders; the tracker is the index that makes them findable
+6. **Single status update under 1 minute; full overview under 5 minutes** — bookkeeping should be invisible, never a bottleneck in the application workflow
 
 ## Why this skill exists
 

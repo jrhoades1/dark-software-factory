@@ -15,8 +15,15 @@ description: >
 
 # CITADEL Workflow — Secure-by-Default Application Development
 
-Build production-ready applications with security integrated at every phase — not bolted
-on at the end.
+## Intent
+
+1. **Threat modeling requires human judgment** — automated scanners find known patterns, but identifying what could go wrong for THIS specific application requires a person who understands the domain
+2. **Enforce step is mandatory, never skippable** — if time is short, reduce scope in Assemble; never skip the security audit to meet a deadline
+3. **Testing completeness before deployment** — functional, security, and integration tests all pass; shipping untested code is shipping unknown risk
+4. **Incident response ownership is defined before go-live** — "who gets paged" is answered before the first user hits production, not after the first outage
+5. **Ship production-ready software that reduces rework** — the CITADEL process exists to build it right once, not to build it fast and fix it later
+6. **Meet regulatory requirements systematically** — HIPAA, SOC 2, and compliance needs are addressed during design, not discovered during audit
+7. **Maintain development velocity without sacrificing security** — Conceive in under 1 hour, Inventory in under 4 hours, total MVP in under 25 hours
 
 > **Prerequisites:** Read `dev-standards` skill (or project's CLAUDE.md) for code quality
 > and security rules that apply during every step of this workflow.

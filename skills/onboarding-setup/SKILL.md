@@ -13,8 +13,14 @@ description: >
 
 # Onboarding & Setup Skill
 
-Set up Claude Code safely with security training integrated into the installation process.
-Security education comes BEFORE access to dangerous operations — not after.
+## Intent
+
+1. **Read-before-allow discipline** — a developer who clicks "Allow" without reading the command is more dangerous than a developer who has no access at all
+2. **Security training before tool access** — education comes before permissions, not after an incident; this ordering is the whole point of the skill
+3. **Manual .gitignore review before first commit** — automated templates miss project-specific secrets; a human must verify the exclusion list
+4. **Safe onboarding from day one** — every new developer or new machine should start with the same security baseline, not a hope that they'll figure it out
+5. **Prevent credential leaks during setup** — the most dangerous moment is the first commit; one .env file in git history is permanent damage
+6. **Full onboarding completes in under 30 minutes** — speed matters for adoption, but security training is not the part to compress
 
 ## Who this is for
 

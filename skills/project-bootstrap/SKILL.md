@@ -16,9 +16,15 @@ description: >
 
 # Project Bootstrap Skill
 
-Build production-ready applications from zero using AI-assisted development. This skill
-encodes the Dark Software Factory methodology: opinionated defaults, progressive complexity,
-and automated quality gates that let a single developer ship what traditionally requires a team.
+## Intent
+
+1. **CLAUDE.md accuracy is sacred** — the CLAUDE.md must describe the project as it actually is, not as it was three commits ago; stale context makes the AI a liability instead of an accelerator
+2. **Quality gates enforce discipline, not process** — linting, type checking, and security scanning run before the first commit, not when someone remembers to add them
+3. **Progressive complexity over premature architecture** — start with the minimum viable structure; add microservices, event buses, and caching when the use case demands it, not when it feels professional
+4. **Stack choices require explicit approval** — opinionated defaults exist to eliminate decision fatigue, but the developer overrides any default with a reason
+5. **Idea to running MVP in under 1 day** — encode best practices so a single developer ships what traditionally requires a team
+6. **Reduce tech debt from day one** — architecture decisions are documented, dependencies are pinned, and patterns are consistent before the codebase grows past the point of easy correction
+7. **Scaffold in under 10 minutes, CLAUDE.md in under 30, total bootstrap ~70 minutes** — speed matters for momentum, but never at the cost of an inaccurate CLAUDE.md or missing quality gates
 
 ## Philosophy
 

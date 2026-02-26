@@ -15,8 +15,15 @@ description: >
 
 # HIPAA Scaffold Skill
 
-Add HIPAA compliance infrastructure to an existing application. This skill assumes
-a project structure already exists (via project-bootstrap or manually created).
+## Intent
+
+1. **PHI boundary decisions require human review** — no automated tool should decide where the PHI fence goes; a person must verify every data flow that touches protected health information
+2. **BAA verification before any integration** — never trust a vendor's "HIPAA compliant" badge; confirm the signed agreement covers the specific use case before writing a single line of integration code
+3. **Maintain 6-year audit trail integrity** — HIPAA's retention requirement is non-negotiable; audit logs are immutable evidence, not operational telemetry
+4. **Enable healthcare delivery without legal risk** — the goal is shipping software that handles patient data correctly, not compliance theater
+5. **Pass HIPAA security assessments on the first attempt** — systematic preparation beats scrambling; every checklist item should be verifiable before the assessor arrives
+6. **PHI audit completes in under 2 hours; RLS policy per table in ~30 minutes** — compliance work should be efficient, but never at the cost of missing a PHI boundary or skipping a table
+7. **Logging overhead stays below 5% of request latency** — audit logging is mandatory, but patients waiting for their records because of logging overhead is a different kind of harm
 
 ## When this skill applies
 

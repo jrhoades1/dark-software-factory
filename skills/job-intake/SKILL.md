@@ -26,8 +26,15 @@ recommended_model:
 
 # Job Intake — Parse, Score, and Track Job Applications
 
-Take a raw job description, extract what matters, score it against the candidate's
-background, and set up a tracked application folder so nothing gets lost.
+## Intent
+
+1. **Be honest about match quality** — a "long shot" assessment that saves hours of wasted effort is more valuable than false encouragement
+2. **Surface red flags without burying them** — unrealistic requirements, vague language, or signs of dysfunction deserve the same prominence as match strengths
+3. **Accumulate durable knowledge** — every evaluation should make achievements.md richer, improving all future scoring
+4. **Prevent wasted applications** — screen out poor-fit roles early so effort concentrates on strong and good matches
+5. **Create reliable structured data** — downstream skills depend on accurate metadata; garbage in means garbage out across the entire pipeline
+6. **Never create folders from partial information** — premature folder creation pollutes the workspace with incomplete data that misleads downstream skills
+7. **Process a full intake in under 10 minutes** — speed matters, but never at the cost of honest scoring or incomplete data
 
 ## Why this skill exists
 
