@@ -1,0 +1,15 @@
+# DSF — Runtime Preferences
+# Read by Claude at skill execution time (not imported by scripts).
+
+# General
+timezone: "America/New_York"
+date_format: "YYYY-MM-DD"
+
+# Model routing defaults
+default_model: "opus"           # For complex reasoning, security audits
+automation_model: "sonnet"      # For routine pipelines, extraction, code generation
+quick_model: "haiku"            # For simple formatting, file operations, lookups
+
+# Communication
+confirm_before_sending: true    # Always confirm before external communications
+verbose_output: false           # Detailed vs concise output

@@ -1,0 +1,23 @@
+# Runtime data
+data/*.db
+data/*.db-journal
+
+# Daily session logs (local to each user)
+memory/logs/
+
+# Scratch files
+.tmp/
+
+# Environment and credentials
+.env
+.env.*
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
