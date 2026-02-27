@@ -237,6 +237,10 @@ logs/
 """
 
 PRE_COMMIT_CONFIG = """repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.10
+    hooks:
+      - id: ruff
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.0
     hooks:
