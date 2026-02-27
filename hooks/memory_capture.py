@@ -8,7 +8,6 @@ This is the BASIC version (Tier 1+2 memory — no API keys required).
 """
 
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -66,13 +65,13 @@ def main():
 
         if hook_input:
             try:
-                data = json.loads(hook_input)
+                json.loads(hook_input)  # validate JSON
                 # Log session activity marker
                 append_to_log("Session activity captured")
             except json.JSONDecodeError:
                 pass
 
-    except Exception as e:
+    except Exception:
         # Hooks should never crash Claude — fail silently
         pass
 

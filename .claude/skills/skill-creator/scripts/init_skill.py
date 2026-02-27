@@ -101,9 +101,9 @@ if __name__ == '__main__':
 def validate_name(name: str) -> str:
     """Validate skill name: lowercase, numbers, hyphens only. Max 64 chars."""
     if not re.match(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$', name) and not re.match(r'^[a-z0-9]$', name):
-        print(f"Error: Skill name must be lowercase letters, numbers, and hyphens only.", file=sys.stderr)
+        print("Error: Skill name must be lowercase letters, numbers, and hyphens only.", file=sys.stderr)
         print(f"  Got: '{name}'", file=sys.stderr)
-        print(f"  Example: 'email-digest', 'build-website', 'research-lead'", file=sys.stderr)
+        print("  Example: 'email-digest', 'build-website', 'research-lead'", file=sys.stderr)
         sys.exit(1)
     if len(name) > 64:
         print(f"Error: Skill name must be 64 characters or less. Got {len(name)}.", file=sys.stderr)
@@ -135,7 +135,7 @@ Examples:
 
     if os.path.exists(skill_dir):
         print(f"Error: Directory already exists: {skill_dir}", file=sys.stderr)
-        print(f"  To update an existing skill, edit it directly.", file=sys.stderr)
+        print("  To update an existing skill, edit it directly.", file=sys.stderr)
         sys.exit(1)
 
     # Create directory structure

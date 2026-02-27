@@ -9,8 +9,7 @@ Works from any project directory that follows DSF structure.
 
 import json
 import sqlite3
-import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -58,7 +57,7 @@ def get_last_session():
     logs = sorted(LOGS_DIR.glob("*.md"), reverse=True)
     for log_path in logs[:3]:  # Check last 3 days
         content = log_path.read_text(encoding="utf-8")
-        lines = [l.strip() for l in content.splitlines() if l.strip().startswith("- [")]
+        lines = [line.strip() for line in content.splitlines() if line.strip().startswith("- [")]
         if lines:
             return {
                 "date": log_path.stem,

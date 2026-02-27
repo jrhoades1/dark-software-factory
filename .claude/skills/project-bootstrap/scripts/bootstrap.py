@@ -13,11 +13,8 @@ Usage:
 
 import argparse
 import os
-import sys
 import subprocess
-import json
 from pathlib import Path
-from datetime import datetime
 
 # ─── Stack Configurations ────────────────────────────────────────────────────
 
@@ -339,12 +336,12 @@ def create_project(name: str, stack: str, output_dir: str, description: str = ""
     
     # Summary
     print(f"\n✅ Project '{name}' bootstrapped successfully!")
-    print(f"\n   Next steps:")
+    print("\n   Next steps:")
     print(f"   1. cd {project_path}")
-    print(f"   2. cp .env.example .env  (and fill in values)")
-    print(f"   3. docker-compose up -d  (start database)")
+    print("   2. cp .env.example .env  (and fill in values)")
+    print("   3. docker-compose up -d  (start database)")
     print(f"   4. {config['dev_cmd']}")
-    print(f"   5. Update CLAUDE.md with your specific project details")
+    print("   5. Update CLAUDE.md with your specific project details")
     print()
     
     return project_path
