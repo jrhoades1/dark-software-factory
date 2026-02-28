@@ -22,7 +22,7 @@
 - If complexity increases attack surface, simplify
 - Think step-by-step before writing any code
 - Ask Jimmy for clarification before writing large amounts of code if ambiguous
-- Prefer smaller, focused functions (<150 lines), composition over inheritance
+- Prefer smaller, focused functions (<150 lines) — easier to review for security flaws and comprehend at a glance. Composition over inheritance
 
 ## Planning (Before Writing Any Code)
 

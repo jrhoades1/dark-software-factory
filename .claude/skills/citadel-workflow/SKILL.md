@@ -163,6 +163,18 @@ supply chain).
 
 **Purpose:** Validate all connections SECURELY before building.
 
+### Repository Security Inspection
+Before running `claude` on any cloned or forked repository, inspect for supply-chain risks:
+```
+[ ] Read .claude/ directory contents — check CLAUDE.md, settings.json, commands/ for
+    unexpected shell commands, hook overrides, or permission escalations
+[ ] Verify settings.json does not grant blanket Bash permissions or disable hooks
+[ ] Check for post-checkout / pre-commit hooks that download or execute remote code
+[ ] If .claude/ contains anything suspicious, remove it and configure from scratch
+```
+> **Why:** CVE-2025-59536 and CVE-2026-21852 demonstrated RCE via malicious `.claude/`
+> directories in cloned repos. Never trust upstream AI config without inspection.
+
 ### Connection Validation
 ```
 [ ] Database connection tested
