@@ -9,20 +9,23 @@ Exit code 2 = block the command (with reason on stdout)
 """
 
 import json
+import re
 import sys
 
-# Commands that should ALWAYS be blocked
+# Regex patterns for dangerous commands — handles whitespace variants, flag
+# reordering, and case variations that simple substring matching would miss.
+# Each tuple: (compiled regex, human-readable label for error messages)
 BLOCKED_PATTERNS = [
-    "rm -rf /",
-    "rm -rf ~",
-    "rm -rf .",
-    "git push --force",
-    "git push -f",
-    "git reset --hard",
-    "DROP TABLE",
-    "DROP DATABASE",
-    "DELETE FROM",         # Without WHERE clause protection
-    "--no-verify",         # Never skip git hooks
+    (re.compile(r"rm\s+-\w*r\w*f\w*\s+/"), "rm -rf /"),
+    (re.compile(r"rm\s+-\w*r\w*f\w*\s+~"), "rm -rf ~"),
+    (re.compile(r"rm\s+-\w*r\w*f\w*\s+\."), "rm -rf ."),
+    (re.compile(r"git\s+push\s+--force\b"), "git push --force"),
+    (re.compile(r"git\s+push\s+-f\b"), "git push -f"),
+    (re.compile(r"git\s+reset\s+--hard\b"), "git reset --hard"),
+    (re.compile(r"drop\s+table\b"), "DROP TABLE"),
+    (re.compile(r"drop\s+database\b"), "DROP DATABASE"),
+    (re.compile(r"delete\s+from\b"), "DELETE FROM"),
+    (re.compile(r"--no-verify\b"), "--no-verify"),
 ]
 
 # Files that should never be deleted or overwritten
@@ -51,11 +54,11 @@ def check_command(command: str) -> dict:
     cmd_lower = command.lower().strip()
 
     # Check blocked patterns
-    for pattern in BLOCKED_PATTERNS:
-        if pattern.lower() in cmd_lower:
+    for regex, label in BLOCKED_PATTERNS:
+        if regex.search(cmd_lower):
             return {
                 "allow": False,
-                "reason": f"BLOCKED: Command contains dangerous pattern '{pattern}'. "
+                "reason": f"BLOCKED: Command contains dangerous pattern '{label}'. "
                          f"This is blocked by guardrail rules. If you need to do this, "
                          f"ask the user for explicit confirmation first."
             }

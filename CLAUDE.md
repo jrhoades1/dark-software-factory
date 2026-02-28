@@ -71,4 +71,6 @@ See `.claude/rules/guardrails.md` for safety rules and `.claude/rules/security-s
 - **`skill-creator`** — Create new skills from workflows.
 - **`task-manager`** — SQLite-backed task and project tracking.
 - **`research`** — Deep research on any topic with structured output.
+- **`compliance-gate`** — Formal gate checkpoint with pass/conditional/rejected verdict and audit document.
+- **`intelligence-scout`** — Weekly AI signal brief: YouTube + web, classified by DSF relevance.
 - **`session-start`** — Unified session startup: briefing, context pickup, daily log.

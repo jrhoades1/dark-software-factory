@@ -150,6 +150,8 @@ def update_task(args):
         return
 
     params.append(args.id)
+    # SAFETY: updates list contains only hardcoded "column = ?" strings from the
+    # if-blocks above. Never derive column names from user input. (CWE-89)
     conn.execute(f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?", params)
     conn.commit()
     conn.close()
