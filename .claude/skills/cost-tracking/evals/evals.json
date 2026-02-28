@@ -1,0 +1,135 @@
+{
+  "skill": "cost-tracking",
+  "version": "1.0.0",
+  "evals": [
+    {
+      "id": "cost-calc-sonnet",
+      "description": "Calculate cost for Claude Sonnet 4 with known token counts",
+      "input": {
+        "model": "claude-sonnet-4-20250514",
+        "tokens_input": 4000,
+        "tokens_output": 2000
+      },
+      "expected": {
+        "cost_usd": 0.042,
+        "calculation": "(4000/1M * $3.00) + (2000/1M * $15.00) = $0.012 + $0.030 = $0.042"
+      }
+    },
+    {
+      "id": "cost-calc-haiku",
+      "description": "Calculate cost for Claude Haiku 4.5 with known token counts",
+      "input": {
+        "model": "claude-haiku-4-5-20251001",
+        "tokens_input": 10000,
+        "tokens_output": 5000
+      },
+      "expected": {
+        "cost_usd": 0.00875,
+        "calculation": "(10000/1M * $0.25) + (5000/1M * $1.25) = $0.0025 + $0.00625 = $0.00875"
+      }
+    },
+    {
+      "id": "cost-calc-opus",
+      "description": "Calculate cost for Claude Opus 4 with known token counts",
+      "input": {
+        "model": "claude-opus-4-20250514",
+        "tokens_input": 3000,
+        "tokens_output": 1000
+      },
+      "expected": {
+        "cost_usd": 0.12,
+        "calculation": "(3000/1M * $15.00) + (1000/1M * $75.00) = $0.045 + $0.075 = $0.12"
+      }
+    },
+    {
+      "id": "spend-cap-enforcement",
+      "description": "AI request should be blocked when monthly spend reaches cap",
+      "setup": {
+        "cost_config": { "monthly_ai_cap_usd": 10.00 },
+        "current_monthly_spend": 10.50
+      },
+      "expected": {
+        "request_blocked": true,
+        "http_status": 429,
+        "error_message_contains": "monthly spend cap"
+      }
+    },
+    {
+      "id": "spend-cap-allowed",
+      "description": "AI request should proceed when under cap",
+      "setup": {
+        "cost_config": { "monthly_ai_cap_usd": 10.00 },
+        "current_monthly_spend": 5.00
+      },
+      "expected": {
+        "request_blocked": false
+      }
+    },
+    {
+      "id": "alert-threshold-warning",
+      "description": "Warning alert should fire at 80% of cap",
+      "setup": {
+        "cost_config": { "monthly_ai_cap_usd": 10.00, "alert_threshold_pct": 80 },
+        "spend_before_call": 7.90,
+        "call_cost": 0.15
+      },
+      "expected": {
+        "alert_created": true,
+        "alert_type": "monthly_cap_warning",
+        "severity": "medium",
+        "threshold_value": 8.00,
+        "actual_value": 8.05
+      }
+    },
+    {
+      "id": "alert-threshold-no-duplicate",
+      "description": "Should not create duplicate warning alerts in same billing period",
+      "setup": {
+        "existing_unresolved_alert": { "alert_type": "monthly_cap_warning", "this_month": true },
+        "spend_after_call": 8.50
+      },
+      "expected": {
+        "new_alert_created": false
+      }
+    },
+    {
+      "id": "single-call-flag",
+      "description": "Flag individual calls above single_call_alert threshold",
+      "setup": {
+        "cost_config": { "single_call_alert_usd": 0.50 },
+        "call_cost": 0.75
+      },
+      "expected": {
+        "alert_created": true,
+        "alert_type": "single_call_high",
+        "severity": "low"
+      }
+    },
+    {
+      "id": "monthly-projection",
+      "description": "Monthly projection calculation on day 10 with $3 spent",
+      "input": {
+        "spend_so_far": 3.00,
+        "days_elapsed": 10,
+        "days_in_month": 28
+      },
+      "expected": {
+        "projected_monthly": 8.40,
+        "calculation": "$3.00 / 10 days * 28 days = $8.40"
+      }
+    },
+    {
+      "id": "unknown-model-error",
+      "description": "Should throw error for unknown model in cost calculation",
+      "input": {
+        "model": "unknown-model-v99",
+        "tokens_input": 1000,
+        "tokens_output": 500
+      },
+      "expected": {
+        "error": true,
+        "error_message_contains": "Unknown model"
+      }
+    }
+  ]
+}
