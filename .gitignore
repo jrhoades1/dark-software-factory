@@ -21,3 +21,27 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code runtime (machine-specific)
+.claude/settings.local.json
+.claude/billing.json
+.claude/project-code.txt
+
+# Additional caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Logs
+*.log
+
+# Virtual environments
+venv/
+.venv/
+
+# Node (if used)
+node_modules/
+
+# Windows
+desktop.ini
