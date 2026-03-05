@@ -37,7 +37,8 @@ user-invokable: true
 | **I** | Inventory | Data schema, security architecture, stack | `project-bootstrap` |
 | **T** | Tie | Validate connections, secrets, config | — |
 | **A** | Assemble | Build with layered security | `dev-standards` |
-| **D** | Drill | Functional + security testing | — |
+| **D** | Drill | Functional + security testing | `e2e-testing` |
+| **D+** | MVP Gate | Pre-demo readiness check (optional) | `mvp-gate` |
 | **E** | Enforce | Pre-deployment security audit | `security-hardening` |
 | **L** | Look | Monitoring, alerting, incident response | `security-hardening` |
 
@@ -338,3 +339,6 @@ security features to "make it work."
 - `security-hardening` — Enforce + Look steps, security audit
 - `hipaa-scaffold` — HIPAA compliance layer for healthcare
 - `servicetitan-analysis` — Operational analytics via MCP
+- `e2e-testing` — Automated browser testing for the Drill step
+- `mvp-gate` — Pre-demo readiness gate between Drill and Enforce
+- `client-follow-up` — Post-demo follow-up protocol

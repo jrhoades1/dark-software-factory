@@ -74,3 +74,6 @@ See `.claude/rules/guardrails.md` for safety rules and `.claude/rules/security-s
 - **`compliance-gate`** — Formal gate checkpoint with pass/conditional/rejected verdict and audit document.
 - **`intelligence-scout`** — Weekly AI signal brief: YouTube + web, classified by DSF relevance.
 - **`session-start`** — Unified session startup: briefing, context pickup, daily log.
+- **`client-follow-up`** — Post-meeting/interview follow-up protocol. Timing, tone matching, tracking.
+- **`e2e-testing`** — Playwright E2E test setup, execution, and verification for any web project.
+- **`mvp-gate`** — Pre-demo readiness gate. Functional checklist, known limitations, demo script. Sits between Drill and Enforce in CITADEL.

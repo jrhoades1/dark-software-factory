@@ -17,6 +17,7 @@ setup instructions, and invoice commands.
 | ALD-SERVICETITAN | ServiceTitan MCP Server | American Leak Detection |
 | ALD-CALL-ANALYSIS | Call Analysis & Training | American Leak Detection |
 | JOB-APPLICATIONS | Job Application System | Internal |
+| HL-PILOT | Career Transformer AI | Higher Landing Inc. |
 
 ## Requirements Management
 

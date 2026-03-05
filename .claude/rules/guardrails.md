@@ -27,6 +27,13 @@ These files must never be deleted or overwritten without explicit confirmation:
 - Never post to social media without user review and approval
 - Never make API calls that create, modify, or delete external resources without confirmation
 
+## Downloads Folder — Ephemeral Source
+- Files in `~/Downloads` may be deleted at any time by the user or system
+- When a file from Downloads is referenced or needed, **immediately copy it into the project** before processing
+- Never rely on a Downloads path as a persistent reference — treat it as a one-time pickup location
+- Store copied files in the appropriate project directory (e.g., `communications/`, `context/`, `data/`)
+- This applies to ALL projects, not just the current one
+
 ## Data Integrity
 - Verify script output format before chaining into another script
 - Don't assume APIs support batch operations — check documentation first
