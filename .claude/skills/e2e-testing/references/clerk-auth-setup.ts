@@ -69,7 +69,7 @@ setup("authenticate test user", async ({ page }) => {
     },
     body: JSON.stringify({
       user_id: userId,
-      expires_in_seconds: 300,
+      expires_in_seconds: 600,
     }),
   });
   if (!tokenRes.ok) {
@@ -96,6 +96,8 @@ setup("authenticate test user", async ({ page }) => {
 // --- helpers.ts (create as separate file) ---
 //
 // import { test } from "@playwright/test";
+// import { setupClerkTestingToken } from "@clerk/testing/playwright";
+// import type { Page } from "@playwright/test";
 //
 // export const hasClerkCreds =
 //   !!process.env.CLERK_SECRET_KEY &&
@@ -108,3 +110,17 @@ setup("authenticate test user", async ({ page }) => {
 //     "Skipped — add CLERK_SECRET_KEY, E2E_CLERK_USER_USERNAME, E2E_CLERK_USER_PASSWORD to .env.local"
 //   );
 // }
+//
+// /** Refresh Clerk testing token per-test to prevent session expiry mid-suite. */
+// export async function refreshClerkSession(page: Page) {
+//   if (hasClerkCreds) {
+//     await setupClerkTestingToken({ page });
+//   }
+// }
+//
+// --- Usage in .auth.spec.ts files ---
+//
+// test.beforeEach(async ({ page }) => {
+//   skipWithoutAuth();
+//   await refreshClerkSession(page);
+// });

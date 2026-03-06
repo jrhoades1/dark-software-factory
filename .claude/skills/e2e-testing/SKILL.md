@@ -226,3 +226,5 @@ These patterns were discovered building DSF projects:
 9. **Nav items with emojis** — `getByRole("link", { name: "Dashboard", exact: true })` fails when the link text is "📊 Dashboard". Drop `exact: true` for nav items with icons.
 10. **`.or()` strict mode** — Playwright's `.or()` can match multiple elements causing strict mode violations. When the page is working correctly (showing both heading AND content), just assert the heading.
 11. **First-load compilation delay** — Next.js dev server compiles pages on first visit. Set `test.setTimeout(60000)` for tests that are first to hit a page.
+12. **Clerk session expiry mid-suite** — Clerk dev sessions expire after ~2 min. Call `setupClerkTestingToken({ page })` in every test's `beforeEach` to refresh the session. Export a `refreshClerkSession(page)` helper for this.
+13. **Sign-in token TTL** — Set `expires_in_seconds: 600` (not 300) when creating sign-in tokens to give more headroom for slow test runs.
