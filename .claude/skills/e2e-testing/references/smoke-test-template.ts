@@ -1,36 +1,16 @@
 /**
  * Smoke Test Template — DSF Standard
  *
- * Copy to: <app-root>/e2e/smoke.spec.ts
+ * Copy to: <app-root>/e2e/smoke.public.spec.ts (for public pages)
  * Adapt: page titles, header text, navigation elements
  *
  * This template covers the minimum viable test suite for any web app.
+ *
+ * IMPORTANT: Never use waitForLoadState("networkidle") — it times out
+ * with WebSocket connections (Clerk, Supabase realtime, etc.).
+ * Always wait for a specific element instead.
  */
 import { test, expect } from "@playwright/test";
-
-// === HELPERS ===
-
-// Adapt: add seed/clear functions if the app uses localStorage or needs test data
-async function seedData(page: import("@playwright/test").Page) {
-  await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  await page.evaluate(() => {
-    // @ts-ignore — seedTestData attached to window by the app
-    if (typeof window.seedTestData === "function") {
-      window.seedTestData();
-    }
-  });
-  await page.reload();
-  await page.waitForLoadState("networkidle");
-}
-
-async function clearData(page: import("@playwright/test").Page) {
-  await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await page.waitForLoadState("networkidle");
-}
 
 // === TESTS ===
 
@@ -40,56 +20,57 @@ test.describe("Smoke tests", () => {
     page.on("pageerror", (err) => errors.push(err.message));
 
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
-
-    // ADAPT: check for your app's header/title
-    await expect(page.locator("header")).toBeVisible();
+    // ADAPT: check for your app's heading
+    await expect(
+      page.getByRole("heading", { name: "Your App Title" })
+    ).toBeVisible({ timeout: 15000 });
 
     expect(errors).toEqual([]);
   });
 
-  test("main content area renders", async ({ page }) => {
+  test("CTA buttons are visible", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("main")).toBeVisible();
+    // ADAPT: check for your main call-to-action buttons/links
+    await expect(
+      page.getByRole("link", { name: "Get Started" })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Sign In" })
+    ).toBeVisible();
+  });
+});
+
+test.describe("Auth protection", () => {
+  test("protected routes redirect unauthenticated users", async ({ page }) => {
+    const response = await page.goto("/dashboard"); // ADAPT: your protected route
+    await page.waitForLoadState("domcontentloaded");
+
+    const url = page.url();
+    const status = response?.status() ?? 0;
+    const isRedirected = !url.includes("/dashboard");
+    const isBlocked = status === 401 || status === 403 || status === 404;
+
+    expect(isRedirected || isBlocked).toBe(true);
   });
 });
 
 test.describe("Navigation", () => {
   test("all primary nav items are visible", async ({ page }) => {
     await page.goto("/");
+    // ADAPT: wait for your page heading, then check nav items
+    await expect(
+      page.getByRole("heading", { name: "Your App Title" })
+    ).toBeVisible({ timeout: 15000 });
 
     // ADAPT: list your navigation items
+    // NOTE: Don't use exact:true if nav items have emoji/icon prefixes
     const navItems = ["Home", "About", "Settings"];
     for (const item of navItems) {
-      await expect(page.getByRole("link", { name: item }).or(page.getByRole("button", { name: item }))).toBeVisible();
-    }
-  });
-});
-
-test.describe("Forms and inputs", () => {
-  test("primary input accepts text", async ({ page }) => {
-    await clearData(page);
-
-    // ADAPT: target your main input element
-    const input = page.locator("textarea, input[type='text']").first();
-    if (await input.isVisible()) {
-      await input.fill("Test input value");
-      await expect(input).toHaveValue("Test input value");
-    }
-  });
-});
-
-test.describe("Persistence", () => {
-  test("data survives page reload", async ({ page }) => {
-    await clearData(page);
-
-    const input = page.locator("textarea, input[type='text']").first();
-    if (await input.isVisible()) {
-      await input.fill("Persistence check");
-      await page.waitForTimeout(1000); // wait for auto-save
-      await page.reload();
-      await page.waitForLoadState("networkidle");
-      await expect(page.locator("textarea, input[type='text']").first()).toHaveValue("Persistence check");
+      await expect(
+        page.getByRole("link", { name: item }).or(
+          page.getByRole("button", { name: item })
+        )
+      ).toBeVisible();
     }
   });
 });
