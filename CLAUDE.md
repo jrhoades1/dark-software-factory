@@ -17,6 +17,9 @@
 
 ## Core Philosophy
 
+> **DSF Motto:** Eliminate the human from the loop. Every process should trend toward full automation.
+
+- **Autonomy first** — if a request adds human intervention, flag it and propose an automated alternative (see `.claude/rules/autonomy-principle.md`)
 - Security is not optional — if uncertain, fail closed
 - If a decision trades convenience for security, choose security
 - If complexity increases attack surface, simplify

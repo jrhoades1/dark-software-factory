@@ -18,6 +18,18 @@ Every DSF web project ships with automated end-to-end tests. No exceptions. A hu
 be able to run one command and know if the app works. This skill handles setup, test creation,
 and execution using Playwright.
 
+## Cost Model: Write Once, Run Free
+
+**AI writes the tests → Playwright runs them natively → $0 per execution.**
+
+The AI is only involved in two moments: (1) reading the codebase and writing `.spec.ts` files,
+and (2) fixing failures in the fix loop. Every test run after that is deterministic scripts
+executing programmatically — zero token cost, zero AI judgment needed.
+
+**Do NOT use MCP servers or Computer Use for E2E testing.** Those approaches burn tokens on
+every run via screenshots or tool calls. Playwright scripts are deterministic — they do the
+exact same thing every time without AI involvement. Write once, run forever.
+
 ## When to Use
 
 - After bootstrapping any web application (pair with `project-bootstrap`)
@@ -70,6 +82,9 @@ which separates setup, public, and authenticated test suites.
 
 ### Step 3: Create Test Structure
 
+Two naming conventions — choose one per project and stay consistent:
+
+**Option A: By page/feature** (default for apps with auth layers)
 ```
 app/
   e2e/
@@ -80,6 +95,22 @@ app/
     [page].auth.spec.ts    # Per-page authenticated tests
   playwright.config.ts
 ```
+
+**Option B: By test type** (good for simpler apps, client demos)
+```
+app/
+  e2e/
+    helpers.ts             # Shared utilities
+    happy-path.spec.ts     # Core user journey that must always work
+    validation.spec.ts     # Form validation, required fields, error states
+    edge-cases.spec.ts     # Boundary values, empty states, unusual inputs
+    navigation.spec.ts     # All links/buttons route correctly
+    persistence.spec.ts    # Data survives reload (localStorage, DB)
+  playwright.config.ts
+```
+
+Option A scales better for large apps with many pages. Option B is more intuitive
+for stakeholders reviewing test results ("all validation tests passed").
 
 ### Step 4: Write Tests
 
@@ -180,12 +211,41 @@ and crash with "test.beforeEach() not expected here."
 ### Step 7: Run and Fix
 
 ```bash
-npm run test:e2e              # Headless, fast
-npm run test:e2e:headed       # Watch the browser
+npm run test:e2e              # Headless, fast, $0 per run
+npm run test:e2e:headed       # Watch the browser (debugging)
 npm run test:e2e:ui           # Interactive Playwright UI
 ```
 
-Fix failures iteratively. Common issues:
+#### Fix Loop (max 3 attempts)
+
+When tests fail, enter the fix loop:
+
+1. Read the failure output and screenshots
+2. Identify root cause (selector changed? timing issue? actual bug?)
+3. Fix the test OR fix the app code
+4. Re-run the failing test file only: `npx playwright test <file> --headed`
+5. If it passes, run the full suite to check for regressions
+6. If 3 attempts fail, stop and report — don't loop forever
+
+**Key distinction:** If the test is wrong (bad selector, timing), fix the test.
+If the app is broken (button doesn't work, form doesn't submit), fix the app
+and note it in the report as an app bug discovered by testing.
+
+#### Parallel Test Writing with Agents
+
+For larger apps, parallelize test creation using the Agent tool. Launch one agent
+per test category simultaneously:
+
+```
+Agent 1: "Write happy-path.spec.ts — core user journey for [app]"
+Agent 2: "Write validation.spec.ts — form validation and error states for [app]"
+Agent 3: "Write edge-cases.spec.ts — boundary values and empty states for [app]"
+```
+
+Each agent reads the codebase independently and writes its own spec file.
+This cuts test authoring time significantly for apps with many flows.
+
+#### Common Issues
 - **Strict mode violation:** Selector matches multiple elements. Use `.first()`, `{ exact: true }`, or more specific selector.
 - **Timeout on networkidle:** WebSocket keeps connections open. Use element-based waits instead.
 - **SecurityError on localStorage:** Didn't navigate to a page first. Always `goto("/")` before `evaluate()`.
@@ -199,6 +259,34 @@ Fix failures iteratively. Common issues:
   run: |
     npx playwright install chromium
     npm run test:e2e
+```
+
+### Step 9: Generate Test Report
+
+After all tests pass (or the fix loop exhausts), generate a summary report:
+
+1. **Results table** — test name, status (pass/fail), browser, duration
+2. **App bugs found** — if tests revealed actual app issues (not test issues), list them explicitly with what was fixed
+3. **Coverage suggestions** — areas that could use additional test coverage
+4. **Backend exposure** — if front-end tests revealed backend problems (can't save data, API errors, broken auth flow), call these out separately
+
+Output the report as an **HTML file** at `<app>/e2e/report.html` using Playwright's built-in reporter:
+
+```bash
+npx playwright test --reporter=html
+```
+
+This generates `playwright-report/index.html` — a browsable, searchable report with
+screenshots, traces, and timing. For client deliverables, also write a plain summary
+to `<app>/e2e/test-summary.md`.
+
+Add to `package.json`:
+```json
+{
+  "scripts": {
+    "test:e2e:report": "npx playwright test --reporter=html && npx playwright show-report"
+  }
+}
 ```
 
 ## Rules
