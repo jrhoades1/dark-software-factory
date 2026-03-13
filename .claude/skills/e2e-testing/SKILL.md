@@ -6,8 +6,7 @@ description: >
   or when the user asks to "test everything," "verify buttons work," "automated testing,"
   or "make sure it works before you give it to me." Also trigger when adding new features
   that need regression protection.
-model: sonnet
-user-invokable: true
+user-invocable: true
 ---
 
 # E2E Testing Skill
@@ -112,9 +111,26 @@ app/
 Option A scales better for large apps with many pages. Option B is more intuitive
 for stakeholders reviewing test results ("all validation tests passed").
 
+**Option C: Persona-driven** (default for all new DSF projects)
+```
+app/
+  e2e/
+    personas.ts            # Persona definitions + fillFormAsPersona() helper
+    smoke.spec.ts          # Page loads, navigation, empty states
+    [feature].spec.ts      # Per-feature tests with persona-specific describe blocks
+    [output].spec.ts       # Output/result tests with mocked API
+  playwright.config.ts
+```
+
+Option C is now the **default for all new projects**. Every test file imports personas
+and uses `fillFormAsPersona()` to drive inputs. Tests are organized by feature, with
+each persona getting its own `test.describe` block. See `references/persona-testing.md`
+for the full pattern, persona design rules, and mock API strategy.
+
 ### Step 4: Write Tests
 
-Follow these patterns:
+Follow these patterns. **All new projects must use persona-driven tests** (see
+`references/persona-testing.md` for the complete guide):
 
 #### Test Categories (minimum coverage)
 
@@ -126,6 +142,7 @@ Follow these patterns:
 | **Auth protection** | Protected routes redirect unauthenticated users | Must have |
 | **Persistence** | Data survives reload (localStorage, DB) | Must have |
 | **Feature** | Core business logic works end-to-end | Must have |
+| **Persona flows** | Each persona can fill form + complete core flow (mocked API) | Must have |
 | **Edge cases** | Empty states, error states, boundary values | Nice to have |
 
 #### Selector Priority

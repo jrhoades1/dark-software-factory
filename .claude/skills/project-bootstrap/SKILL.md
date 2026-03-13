@@ -12,7 +12,7 @@ description: >
   AI-assisted development workflows or rapid prototyping. Do NOT trigger for modifications
   to existing codebases, bug fixes, or feature additions to running projects — those are
   maintenance tasks, not bootstrapping.
-user-invokable: true
+user-invocable: true
 ---
 
 # Project Bootstrap Skill
@@ -103,10 +103,12 @@ project-root/
 │   │   └── pages/
 │   └── shared/            # Types, constants, utilities
 ├── scripts/               # Automation (migrations, seeds, deploys)
-├── tests/                 # Mirror src/ structure
+├── e2e/                   # Playwright persona-driven E2E tests
+│   ├── personas.ts        # Persona definitions + fillFormAsPersona helper
+│   └── *.spec.ts          # Test files (smoke, features, output)
+├── tests/                 # Unit + integration tests (mirror src/ structure)
 │   ├── unit/
-│   ├── integration/
-│   └── e2e/
+│   └── integration/
 └── docs/                  # Architecture decisions, API specs
     └── decisions/         # ADR (Architecture Decision Records)
 ```
@@ -145,13 +147,44 @@ hooks and in CI:
 
 See `references/quality-gates.md` for stack-specific configurations.
 
-## Step 5: First commit and dev environment
+## Step 5: Set up persona-driven E2E tests
+
+Every web project gets Playwright E2E tests with persona-driven inputs **before the
+first commit**. This is not optional.
+
+1. **Install Playwright** — `npm install -D @playwright/test && npx playwright install chromium`
+2. **Create `playwright.config.ts`** — See `e2e-testing` skill's config template
+3. **Define personas** in `e2e/personas.ts`:
+   - Derive 3-5 personas from the product spec's user types
+   - Include one power user, one minimal-input user, and one multi-category user
+   - Each persona has realistic input text, tags/categories, and preferences
+   - Export a `fillFormAsPersona(page, persona)` helper
+4. **Write test files**:
+   - `e2e/smoke.spec.ts` — Page loads, navigation, empty states
+   - `e2e/{feature}.spec.ts` — Per-feature tests with one `test.describe` per persona
+   - `e2e/{output}.spec.ts` — Output tests with **mocked API** (never hit real AI APIs)
+5. **Add test scripts** to `package.json`:
+   ```json
+   {
+     "test:e2e": "npx playwright test",
+     "test:e2e:headed": "npx playwright test --headed",
+     "test:e2e:ui": "npx playwright test --ui"
+   }
+   ```
+6. **Add to `.gitignore`**: `test-results/`, `playwright-report/`
+7. **Run and fix** — All tests must pass before moving to Step 6
+
+See the `e2e-testing` skill's `references/persona-testing.md` for the full pattern,
+persona design rules, mock API strategy, and domain adaptation guide.
+
+## Step 6: First commit and dev environment
 
 The bootstrap should produce a project that:
 - Runs locally with a single command (`docker-compose up` or equivalent)
 - Has a passing CI pipeline (even if it's just linting an empty project)
 - Has a CLAUDE.md that accurately describes the current state
 - Has zero secrets committed (use .env.example pattern)
+- Has passing persona-driven E2E tests (`npm run test:e2e`)
 
 Verify all of this before telling the user the project is ready.
 
