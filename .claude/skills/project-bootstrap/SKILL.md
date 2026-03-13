@@ -65,7 +65,27 @@ ask — but suggest smart defaults based on context:
 
 Don't spend more than one exchange on this. Suggest defaults, let the user override.
 
-## Step 2: Scaffold the project
+## Step 2: Copy DSF base files (automatic)
+
+Before any scaffolding, the bootstrap script copies the DSF `.claude/rules/` directory
+into the new project. This ensures every subproject inherits:
+
+- **guardrails.md** — Destructive action safety, protected files, data integrity
+- **security-standards.md** — OWASP, input validation, secrets management
+- **autonomy-principle.md** — Eliminate the human from the loop
+- **memory-protocol.md** — Session persistence rules
+- **analysis-protocol.md** — Multi-dimensional analysis checks
+- **billing-protocol.md** — Cost tracking and attribution
+- **session-start.md** — Session startup protocol
+
+These rules are what make Claude behave consistently across all DSF projects. Without
+them, each subproject is a blank slate with no guardrails.
+
+If `.claude/settings.json` exists in the DSF root, it is also copied.
+
+**This step runs automatically** — the bootstrap script handles it. No manual action needed.
+
+## Step 3: Scaffold the project
 
 Run the bootstrap script, which handles directory creation, dependency installation,
 and initial configuration:
@@ -87,6 +107,8 @@ Every bootstrapped project follows these conventions:
 
 ```
 project-root/
+├── .claude/
+│   └── rules/             # DSF rules (copied from factory root)
 ├── CLAUDE.md              # LLM instructions for this specific project
 ├── README.md              # Human-readable project overview
 ├── docker-compose.yml     # Local dev environment
@@ -120,7 +142,7 @@ project-root/
   without framework-specific knowledge
 - Scripts directory means repetitive tasks become one-liners, not context window burns
 
-## Step 3: Generate the CLAUDE.md
+## Step 4: Generate the CLAUDE.md
 
 Every project gets a CLAUDE.md at the root. This is the most important file in the repo —
 it's what makes the Dark Software Factory work. Read `references/claude-md-template.md`
@@ -135,7 +157,7 @@ for the full template, but the key sections are:
 
 The CLAUDE.md should be updated as the project evolves. It's a living document.
 
-## Step 4: Set up quality gates
+## Step 5: Set up quality gates
 
 Before the first commit, establish automated quality checks. These run as pre-commit
 hooks and in CI:
@@ -147,7 +169,7 @@ hooks and in CI:
 
 See `references/quality-gates.md` for stack-specific configurations.
 
-## Step 5: Set up persona-driven E2E tests
+## Step 6: Set up persona-driven E2E tests
 
 Every web project gets Playwright E2E tests with persona-driven inputs **before the
 first commit**. This is not optional.
@@ -172,12 +194,12 @@ first commit**. This is not optional.
    }
    ```
 6. **Add to `.gitignore`**: `test-results/`, `playwright-report/`
-7. **Run and fix** — All tests must pass before moving to Step 6
+7. **Run and fix** — All tests must pass before moving to Step 7
 
 See the `e2e-testing` skill's `references/persona-testing.md` for the full pattern,
 persona design rules, mock API strategy, and domain adaptation guide.
 
-## Step 6: First commit and dev environment
+## Step 7: First commit and dev environment
 
 The bootstrap should produce a project that:
 - Runs locally with a single command (`docker-compose up` or equivalent)

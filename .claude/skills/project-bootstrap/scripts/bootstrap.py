@@ -13,6 +13,7 @@ Usage:
 
 import argparse
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -203,6 +204,9 @@ GITIGNORE_TEMPLATE = """# Environment
 .env.local
 .env.*.local
 
+# Claude Code local settings (may contain machine-specific hooks/permissions)
+.claude/settings.local.json
+
 # Dependencies
 node_modules/
 __pycache__/
@@ -258,19 +262,54 @@ PRE_COMMIT_CONFIG = """repos:
 
 # ─── Core Logic ──────────────────────────────────────────────────────────────
 
+def copy_dsf_base_files(project_path: Path):
+    """Copy DSF base .claude/rules and settings into the new project.
+
+    Every subproject inherits the DSF rules (guardrails, security standards,
+    autonomy principle, etc.) so Claude follows the same patterns everywhere.
+    """
+    # Locate the DSF root — this script lives at .claude/skills/project-bootstrap/scripts/
+    dsf_root = Path(__file__).resolve().parent.parent.parent.parent
+
+    # --- Copy .claude/rules/ ---
+    src_rules = dsf_root / ".claude" / "rules"
+    if src_rules.is_dir():
+        dest_rules = project_path / ".claude" / "rules"
+        dest_rules.mkdir(parents=True, exist_ok=True)
+        for rule_file in src_rules.iterdir():
+            if rule_file.is_file() and rule_file.suffix == ".md":
+                shutil.copy2(rule_file, dest_rules / rule_file.name)
+                print(f"   ✓ .claude/rules/{rule_file.name}")
+    else:
+        print("   ⚠ DSF rules directory not found — skipping rule copy")
+
+    # --- Copy .claude/settings.json if it exists ---
+    src_settings = dsf_root / ".claude" / "settings.json"
+    if src_settings.is_file():
+        dest_claude = project_path / ".claude"
+        dest_claude.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src_settings, dest_claude / "settings.json")
+        print("   ✓ .claude/settings.json")
+
+
 def create_project(name: str, stack: str, output_dir: str, description: str = ""):
     """Scaffold a complete Dark Software Factory project."""
-    
+
     config = STACKS[stack]
     project_path = Path(output_dir) / name
     name_snake = name.replace("-", "_")
-    
+
     print(f"\n🏭 Dark Software Factory — Bootstrapping '{name}' ({config['label']})")
     print(f"   Target: {project_path.resolve()}\n")
-    
+
     # Create project root
     project_path.mkdir(parents=True, exist_ok=True)
-    
+
+    # Copy DSF base files FIRST — before any other scaffolding
+    print("🔗 Copying DSF base rules and settings...")
+    copy_dsf_base_files(project_path)
+    print()
+
     # Create directory structure
     print("📁 Creating directory structure...")
     for dir_path in config["dirs"]:
