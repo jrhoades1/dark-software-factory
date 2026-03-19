@@ -160,14 +160,17 @@ The CLAUDE.md should be updated as the project evolves. It's a living document.
 ## Step 5: Set up quality gates
 
 Before the first commit, establish automated quality checks. These run as pre-commit
-hooks and in CI:
+hooks, pre-push hooks, and in CI:
 
 1. **Linting** — Language-appropriate linter with opinionated config
 2. **Type checking** — TypeScript strict mode, Python type hints with mypy, etc.
 3. **Security scanning** — Dependency audit, secret detection
 4. **Test runner** — Even if there are no tests yet, the runner should be configured
+5. **Pre-push hook** — Lint + build + E2E must pass before `git push`. This is the primary gate; CI is the backup. Developers should never find out about test failures from a CI email.
+6. **Deploy awareness** (user-facing projects) — A `MaintenanceBanner` component that detects API failures during deploys and shows "system updating" instead of confusing errors. Auto-recovers by polling `/api/health`.
 
-See `references/quality-gates.md` for stack-specific configurations.
+See `references/quality-gates.md` for stack-specific configurations, pre-push hook
+templates, and the deploy awareness pattern.
 
 ## Step 6: Set up persona-driven E2E tests
 
@@ -207,6 +210,8 @@ The bootstrap should produce a project that:
 - Has a CLAUDE.md that accurately describes the current state
 - Has zero secrets committed (use .env.example pattern)
 - Has passing persona-driven E2E tests (`npm run test:e2e`)
+- Has a pre-push hook installed (`bash hooks/setup-hooks.sh`) that gates on lint + build + E2E
+- Has deploy awareness (user-facing projects) — MaintenanceBanner + `/api/health` endpoint
 
 Verify all of this before telling the user the project is ready.
 

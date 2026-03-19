@@ -66,6 +66,76 @@ npx gitleaks detect --staged
 
 ---
 
+## Pre-push Hook (E2E gate)
+
+Pre-commit hooks catch formatting and secrets. Pre-push hooks catch broken builds and
+failing E2E tests **before they reach CI**. This is non-negotiable for any project with
+real users — a developer should never find out about test failures from a CI email.
+
+### Setup
+
+Create `hooks/pre-push` in the project root (tracked in git):
+
+```bash
+#!/bin/bash
+# Pre-push hook: lint, build, and E2E must pass before pushing.
+# Skip with: git push --no-verify (only when you know what you're doing)
+set -e
+
+echo "Pre-push: running lint + build + E2E..."
+
+cd app  # adjust to your project's app directory
+
+npm run lint || { echo "Lint failed. Fix errors before pushing."; exit 1; }
+npm run build || { echo "Build failed. Fix errors before pushing."; exit 1; }
+npx playwright test || { echo "E2E tests failed. Fix before pushing."; exit 1; }
+
+echo "All checks passed. Pushing."
+```
+
+Create `hooks/setup-hooks.sh` to install:
+
+```bash
+#!/bin/bash
+# Run once after cloning: bash hooks/setup-hooks.sh
+HOOKS_DIR="$(cd "$(dirname "$0")" && pwd)"
+GIT_HOOKS_DIR="$(git rev-parse --show-toplevel)/.git/hooks"
+
+echo "Installing git hooks..."
+for hook in pre-push; do
+  if [ -f "$HOOKS_DIR/$hook" ]; then
+    cp "$HOOKS_DIR/$hook" "$GIT_HOOKS_DIR/$hook"
+    chmod +x "$GIT_HOOKS_DIR/$hook"
+    echo "  installed $hook"
+  fi
+done
+echo "Done."
+```
+
+Add to project README / CLAUDE.md under setup: `bash hooks/setup-hooks.sh`
+
+**Why pre-push instead of pre-commit for E2E?** Pre-commit runs on every commit — E2E
+suites take minutes, which kills flow. Pre-push runs once before sharing, which is the
+right gate. CI is the backup, not the primary check.
+
+---
+
+## Deploy Awareness (user-facing projects)
+
+Any project with real users must include a deploy-awareness system so users never see
+raw "couldn't connect" errors during Vercel/Netlify/etc deployments.
+
+**Pattern:**
+1. Add a `MaintenanceBanner` component that listens for API failures
+2. On failure, show "System is updating — hang tight" with auto-recovery polling
+3. Poll `/api/health` every 3s until healthy, then auto-dismiss
+4. Wire all API catch blocks to signal the banner via a custom event
+
+This was learned the hard way: a client reported a "broken" coaching tool that was
+actually just a 60-second deploy window. Users don't know what a deploy is.
+
+---
+
 ## Linting Configuration
 
 ### Ruff (Python) — replaces Black, isort, flake8, and more
