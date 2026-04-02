@@ -156,23 +156,33 @@ One sub-agent (model: opus) receives everything:
 - All 5 advisor responses (de-anonymized, advisor names visible)
 - All 5 peer reviews
 
-The chairman produces the verdict using this exact structure:
+The chairman produces the verdict using this exact structure. **IMPORTANT:** The
+verdict is rendered by a markdown-to-HTML converter, so use clean markdown: `##`
+headings, `**bold**` for emphasis, blank lines between paragraphs, and numbered
+lists where appropriate. Do NOT dump everything into a single paragraph.
 
 ```
 ## Where the Council Agrees
-[Points multiple advisors converged on independently. High-confidence signals.]
+
+[Points multiple advisors converged on independently. High-confidence signals.
+Use numbered points if there are multiple. One paragraph per point.]
 
 ## Where the Council Clashes
-[Genuine disagreements. Both sides presented. Why reasonable advisors disagree.]
+
+[Genuine disagreements. Both sides presented. Why reasonable advisors disagree.
+Separate each clash into its own paragraph with a blank line between them.]
 
 ## Blind Spots the Council Caught
+
 [Things that only emerged through peer review. What individual advisors missed.]
 
 ## The Recommendation
+
 [Clear, direct recommendation. Not "it depends." A real answer with reasoning.
 The chairman CAN disagree with the majority if the dissenter's reasoning is strongest.]
 
 ## The One Thing to Do First
+
 [A single concrete next step. Not a list. One thing.]
 ```
 

@@ -4,6 +4,7 @@
 import argparse
 import html
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,9 +28,74 @@ ADVISOR_ICONS = {
 }
 
 
-def escape(text: str) -> str:
-    """HTML-escape text and convert newlines to <br>."""
-    return html.escape(text).replace("\n", "<br>\n")
+def md_to_html(text: str) -> str:
+    """Convert markdown text to HTML. Handles headings, bold, italic,
+    numbered lists, bullet lists, and paragraphs."""
+    escaped = html.escape(text)
+    lines = escaped.split("\n")
+    out: list[str] = []
+    in_ul = False
+    in_ol = False
+
+    for line in lines:
+        stripped = line.strip()
+
+        # Close open lists if this line isn't a list item
+        if in_ul and not stripped.startswith("- ") and not stripped.startswith("* "):
+            out.append("</ul>")
+            in_ul = False
+        if in_ol and not re.match(r"^\d+\.\s", stripped):
+            out.append("</ol>")
+            in_ol = False
+
+        # Headings
+        if stripped.startswith("## "):
+            out.append(f"<h2>{stripped[3:]}</h2>")
+            continue
+        if stripped.startswith("### "):
+            out.append(f"<h3>{stripped[4:]}</h3>")
+            continue
+
+        # Bullet list
+        if stripped.startswith("- ") or stripped.startswith("* "):
+            if not in_ul:
+                out.append("<ul>")
+                in_ul = True
+            item = stripped[2:]
+            item = _inline_formatting(item)
+            out.append(f"  <li>{item}</li>")
+            continue
+
+        # Numbered list
+        ol_match = re.match(r"^(\d+)\.\s(.*)", stripped)
+        if ol_match:
+            if not in_ol:
+                out.append("<ol>")
+                in_ol = True
+            item = _inline_formatting(ol_match.group(2))
+            out.append(f"  <li>{item}</li>")
+            continue
+
+        # Blank line
+        if not stripped:
+            continue
+
+        # Regular paragraph
+        out.append(f"<p>{_inline_formatting(stripped)}</p>")
+
+    if in_ul:
+        out.append("</ul>")
+    if in_ol:
+        out.append("</ol>")
+
+    return "\n".join(out)
+
+
+def _inline_formatting(text: str) -> str:
+    """Apply bold and italic markdown formatting."""
+    text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
+    return text
 
 
 def build_advisor_sections(advisors: dict) -> str:
@@ -38,6 +104,7 @@ def build_advisor_sections(advisors: dict) -> str:
     for name, response in advisors.items():
         color = ADVISOR_COLORS.get(name, "#555")
         icon = ADVISOR_ICONS.get(name, "&#8226;")
+        rendered = md_to_html(response)
         sections.append(f"""
         <details class="advisor-section">
             <summary style="border-left: 4px solid {color}; padding-left: 12px;">
@@ -45,7 +112,7 @@ def build_advisor_sections(advisors: dict) -> str:
                 <strong>The {html.escape(name)}</strong>
             </summary>
             <div class="advisor-content" style="border-left: 4px solid {color}; padding-left: 12px;">
-                <p>{escape(response)}</p>
+                {rendered}
             </div>
         </details>""")
     return "\n".join(sections)
@@ -61,10 +128,11 @@ def build_review_section(reviews: list, mapping: dict) -> str:
 
     review_items = []
     for i, review in enumerate(reviews, 1):
+        rendered = md_to_html(review)
         review_items.append(f"""
             <div class="review-item">
                 <h4>Reviewer {i}</h4>
-                <p>{escape(review)}</p>
+                {rendered}
             </div>""")
 
     return f"""
@@ -83,8 +151,8 @@ def render(question: str, verdict: str, advisors: dict, reviews: list,
     template_html = TEMPLATE.read_text(encoding="utf-8")
 
     replacements = {
-        "{{QUESTION}}": escape(question),
-        "{{VERDICT}}": verdict,  # already markdown-rendered or raw — keep as-is
+        "{{QUESTION}}": md_to_html(question),
+        "{{VERDICT}}": md_to_html(verdict),
         "{{ADVISOR_SECTIONS}}": build_advisor_sections(advisors),
         "{{REVIEW_SECTION}}": build_review_section(reviews, mapping),
         "{{TIMESTAMP}}": html.escape(timestamp),
