@@ -21,6 +21,14 @@ security headers (HSTS, X-Content-Type-Options, X-Frame-Options).
 **Database:** Parameterized queries only. RLS on all user-data tables. Least privilege.
 CHECK constraints. SSL/TLS required. Never expose raw errors.
 
+**Supabase RLS (all projects):**
+- Every table in the `public` schema MUST have RLS enabled (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`).
+- If the app uses service role key server-side, RLS with no policies is acceptable (blocks anon/authenticated API access).
+- If the app uses client-side Supabase calls, add explicit RLS policies scoped to the authenticated user.
+- When creating new tables, enable RLS in the same migration. Never defer.
+- All custom functions must set `search_path` explicitly (`SET search_path = public`).
+- Run `get_advisors(type: "security")` after any DDL change. Zero CRITICAL/ERROR advisors is the target.
+
 **AI features:** Sanitize input before prompts. Validate output before rendering.
 Rate limit. Cost limit. Log for abuse detection.
 
@@ -44,7 +52,7 @@ Verify new packages (maintainer, CVEs, downloads, license).
 | Media processing | Resource limits, sandboxing, array arguments |
 | External fetches | SSRF protections, timeouts, size caps |
 | Authentication | Token rotation, secure cookies, lockout, CSRF |
-| Database queries | Parameterized only, RLS enabled, least privilege |
+| Database queries | Parameterized only, RLS enabled, least privilege, Supabase security advisor clean |
 | AI features | Input sanitization, output validation, rate/cost limits |
 | Dependencies | Audit run, lockfile reviewed, no loose semver |
 | Documentation | Update ALL docs that reference changed features |
